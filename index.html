@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ใบกิจกรรมที่ 2.3 การค้นหาข้อมูลแบบทวิภาค</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 20px;
+            color: #1f2937;
+        }
+        .container {
+            max-width: 1000px;
+            background: #ffffff;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        h2 {
+            text-align: center;
+            color: #1e3a8a;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #4b5563;
+            margin-bottom: 25px;
+        }
+        /* ช่องกรอกข้อมูลนักเรียน */
+        .student-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+            background: #f8fafc;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .student-info label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        .student-info input, .student-info select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-family: 'Sarabun', sans-serif;
+        }
+        /* ข้อมูลขั้นตอนวิธีการค้นหาข้อมูลแบบทวิภาค */
+        .algo-box {
+            background: #f0fdf4;
+            border-left: 5px solid #16a34a;
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            font-size: 14.5px;
+            line-height: 1.6;
+        }
+        .algo-box h4 {
+            margin-top: 0;
+            color: #14532d;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        .algo-box ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .data-box {
+            background: #fffbeb;
+            border-left: 5px solid #d97706;
+            padding: 15px;
+            border-radius: 4px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin-bottom: 25px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+        th, td {
+            border: 1px solid #cbd5e1;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #334155;
+            color: white;
+            font-weight: 500;
+            min-width: 80px;
+        }
+        /* ช่องเติมคำตอบ */
+        .quiz-input {
+            width: 50px;
+            padding: 6px;
+            text-align: center;
+            border: 2px solid #94a3b8;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .quiz-select {
+            width: 110px;
+            padding: 6px;
+            border: 2px solid #94a3b8;
+            border-radius: 6px;
+            font-weight: bold;
+            font-family: 'Sarabun', sans-serif;
+        }
+        .input-correct {
+            border-color: #10b981 !important;
+            background-color: #ecfdf5;
+        }
+        .input-incorrect {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2;
+        }
+        .text-fixed-finish {
+            color: #dc2626;
+            font-weight: bold;
+            font-size: 14.5px;
+        }
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 20px;
+        }
+        .btn-submit:hover {
+            background-color: #1d4ed8;
+        }
+        /* ป๊อบอัพแจ้งเตือน (Modal) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 380px;
+            width: 85%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .modal-content h3 {
+            color: #ef4444;
+            margin-top: 0;
+        }
+        .modal-btn {
+            background: #1e293b;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-family: 'Sarabun', sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>ใบกิจกรรมที่ 2.3 การค้นหาข้อมูลแบบทวิภาค</h2>
+    <div class="subtitle">วิชาเทคโนโลยี (วิทยาการคำนวณ)</div>
+    
+    <form id="sheetForm">
+        <div class="student-info">
+            <div>
+                <label>เลขประจำตัว</label>
+                <input type="text" id="studentId" required placeholder="เช่น 55432">
+            </div>
+            <div>
+                <label>ชื่อ-นามสกุล</label>
+                <input type="text" id="fullName" required placeholder="ระบุชื่อ-นามสกุล">
+            </div>
+            <div>
+                <label>เลขที่</label>
+                <input type="number" id="no" min="1" required placeholder="เช่น 1">
+            </div>
+            <div>
+                <label>ตอน</label>
+                <select id="section" required>
+                    <option value="">เลือกตอน</option>
+                    <option value="ก">ก</option>
+                    <option value="ข">ข</option>
+                </select>
+            </div>
+            <div>
+                <label>ห้อง</label>
+                <input type="text" id="room" required placeholder="เช่น ม.4/1">
+            </div>
+        </div>
+
+        <div class="algo-box">
+            <h4>💡 ขั้นตอนวิธี : การค้นหาข้อมูลแบบทวิภาค (Binary Search Algorithm)</h4>
+            <strong>ข้อมูลเข้า:</strong> รายการ L ที่มีข้อมูลการเรียงลำดับจากน้อยไปหามาก และข้อมูลที่ต้องการค้นหา (target)<br>
+            <strong>ข้อมูลออก:</strong> ค่าดัชนี i ในรายการ L ที่บอกตำแหน่งของ target (หากไม่พบข้อมูลจะคืนค่าบรรลุเงื่อนไขสิ้นสุด)<br>
+            <strong>ขั้นตอนวิธี:</strong>
+            <ol>
+                <li>ให้ $n$ $\leftarrow$ จำนวนข้อมูลในรายการ L</li>
+                <li>ให้ $left$ $\leftarrow$ $1$</li>
+                <li>ให้ $right$ $\leftarrow$ $n$</li>
+                <li>ทำซ้ำในขณะที่ $left \le right$:
+                    <ul>
+                        <li>ให้ $mid$ $\leftarrow$ $\lfloor(left + right) / 2\rfloor$</li>
+                        <li>ให้ $x$ $\leftarrow$ ข้อมูลในรายการ L ณ ตำแหน่งดัชนี $mid$</li>
+                        <li>ถ้า $x$ เท่ากับ $target$ ให้ <strong>คืนค่าดัชนี $mid$ และจบการทำงาน</strong></li>
+                        <li>ถ้า $x$ มากกว่า $target$ ให้ $right$ $\leftarrow$ $mid - 1$</li>
+                        <li>ถ้า $x$ น้อยกว่า $target$ ให้ $left$ $\leftarrow$ $mid + 1$</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="data-box">
+            รายการข้อมูลเริ่มต้นก่อนเรียงลำดับ: 20, 16, 8, 7, 6, 10, 11, 12, 14, 22, 15, 17, 28, 29, 30, 4, 2, 21
+        </div>
+
+        <p><strong>คำชี้แจงส่วนที่ 1:</strong> เรียงลำดับข้อมูลจากน้อยไปหามาก และเติมคำตอบลงในช่องว่างของรายการข้อมูล L (18 ช่องคำตอบ)</p>
+        
+        <div class="table-responsive">
+            <table>
+                <tr style="background:#f1f5f9;">
+                    <th style="background:#475569;">ดัชนี (i)</th>
+                    <td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td>
+                </tr>
+                <tr>
+                    <th style="background:#475569;">ข้อมูล (L)</th>
+                    <td><input type="number" class="quiz-input target-item" data-ans="2" id="l1" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="4" id="l2" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="6" id="l3" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="7" id="l4" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="8" id="l5" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="10" id="l6" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="11" id="l7" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="12" id="l8" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="14" id="l9" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="15" id="l10" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="16" id="l11" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="17" id="l12" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="20" id="l13" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="21" id="l14" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="22" id="l15" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="28" id="l16" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="29" id="l17" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="30" id="l18" required></td>
+                </tr>
+            </table>
+        </div>
+
+        <p><strong>คำชี้แจงส่วนที่ 2:</strong> แสดงขั้นตอนวิธีค้นหาข้อมูล target = 12 กำหนดให้ n = 18 โดยเติมคำตอบลงในช่องว่างของตารางให้สมบูรณ์ (24 ช่องคำตอบ)</p>
+        
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>รอบที่</th>
+                        <th>left</th>
+                        <th>right</th>
+                        <th>mid</th>
+                        <th>x (ข้อมูลที่ mid)</th>
+                        <th>ผลเปรียบเทียบกับ target (12)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><input type="number" class="quiz-input target-item" data-ans="1" id="s1_l" required></td>
+                        <td><input type="number" class="quiz-input target-item" data-ans="18" id="s1_r" required></td>
+                        <td><input type="number" class="quiz-input target-item" data-ans="9" id="s1_m" required></td>
+                        <td><input type="number" class="quiz-input target-item" data-ans="14" id="s1_x" required></td>
+                        <td>
+                            <select class="quiz-select target-item" data-ans="มากกว่า" id="s1_c" required>
+                                <option value="">เลือกคำตอบ</option>
+                                <option value="มากกว่า">มากกว่า</option>
+                                <option value="น้อยกว่า">น้อยกว่า</option>
+                                <option value="เท่ากับ">เท่ากับ</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><input type="number" class="quiz-input target-item" data-ans="1" id="s2_l" required></td>
+                        <td><input type="number" class="quiz-input target-item" data-ans="8" id="s2_r" required></td>
+                        <td><input type="number" class="quiz-input target-item" data-ans="4" id="s2_m" required></td>
+                        <td><input type="number" class="quiz-input target-item" data-ans="7" id="s2_x" required></td>
+                        <td>
+                            <select class="quiz-select target-item" data-ans="น้อยกว่า" id="s2_c" required>
+                                <option value="">เลือกคำตอบ</option>
+                                <option value="มากกว่า">มากกว่า</option>
+                                <option value="น้อยกว่า">น้อยกว่า</option>
+                                <option value="เท่ากับ">เท่ากับ</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><input type="number" class="quiz-input target-item" data-ans="5" id="s3_l" required></td>
+                        <td><input type="number" class="quiz-input target-item" data-ans="8" id="s3_r" required></td>
+                        <td><input type="number" class="quiz-input target-item" data-ans="6" id="s3_m" required></td>
+                        <td><input type="number" class="quiz-input target-item" data-ans="10" id="s3_x" required></td>
+                        <td>
+                            <select class="quiz-select target-item" data-ans="น้อยกว่า" id="s3_c" required>
+                                <option value="">เลือกคำตอบ</option>
+                                <option value="มากกว่า">มากกว่า</option>
+                                <option value="น้อยกว่า">น้อยกว่า</option>
+                                <option value="เท่ากับ">เท่ากับ</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><input type="number" class="quiz-input target-item" data-ans="7" id="s4_l" required></td>
+                        <td><input type="number" class="quiz-input target-item" data-ans="8" id="s4_r" required></td>
+                        <td><input type="number" class="quiz-input target-item" data-ans="7" id="s4_m" required></td>
+                        <td><input type="number" class="quiz-input target-item" data-ans="11" id="s4_x" required></td>
+                        <td>
+                            <select class="quiz-select target-item" data-ans="น้อยกว่า" id="s4_c" required>
+                                <option value="">เลือกคำตอบ</option>
+                                <option value="มากกว่า">มากกว่า</option>
+                                <option value="น้อยกว่า">น้อยกว่า</option>
+                                <option value="เท่ากับ">เท่ากับ</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><input type="number" class="quiz-input target-item" data-ans="8" id="s5_l" required></td>
+                        <td><input type="number" class="quiz-input target-item" data-ans="8" id="s5_r" required></td>
+                        <td><input type="number" class="quiz-input target-item" data-ans="8" id="s5_m" required></td>
+                        <td><input type="number" class="quiz-input target-item" data-ans="12" id="s5_x" required></td>
+                        <td class="text-fixed-finish">คืนค่าดัชนี i = 8</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <button type="submit" class="btn-submit">ส่งบันทึกผลคะแนนไปยังระบบ</button>
+    </form>
+</div>
+
+<div class="modal" id="alertModal">
+    <div class="modal-content">
+        <h3>⚠️ คำแจ้งเตือนระบบ</h3>
+        <p>ตัวเลขหรือผลการเปรียบเทียบที่คุณระบุไม่ถูกต้องตามขั้นตอนวิธี กรุณาทบทวนหลักการค้นหาแบบทวิภาคใหม่อีกครั้ง!</p>
+        <button class="modal-btn" onclick="closeModal()">ตกลง</button>
+    </div>
+</div>
+
+<script>
+    // ป๊อบอัพแจ้งเตือนหากเติมคำตอบผิดแบบ Real-time
+    const allInputs = document.querySelectorAll('.target-item');
+    allInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            const userAns = this.value.trim();
+            const correctAns = this.getAttribute('data-ans');
+            
+            if (userAns !== "") {
+                if (userAns !== correctAns) {
+                    this.classList.remove('input-correct');
+                    this.classList.add('input-incorrect');
+                    openModal(); // สั่งให้ป๊อบอัพเด้งแจ้งเตือน
+                } else {
+                    this.classList.remove('input-incorrect');
+                    this.classList.add('input-correct');
+                }
+            } else {
+                this.classList.remove('input-correct', 'input-incorrect');
+            }
+        });
+    });
+
+    function openModal() {
+        document.getElementById('alertModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('alertModal').style.display = 'none';
+    }
+
+    // คำนวณคะแนนรวมทุกช่อง (18 + 24 = 42 ช่องคำตอบ) และแปลงเป็นสัดส่วนเต็ม 5 คะแนนเต็ม
+    document.getElementById('sheetForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        let correctCount = 0;
+        const totalItems = allInputs.length; // รวมทั้งหมด 42 ช่องคำตอบในปัจจุบัน
+
+        allInputs.forEach(input => {
+            if (input.value.trim() === input.getAttribute('data-ans')) {
+                correctCount++;
+            }
+        });
+
+        // คิดคำนวณและทอนลงเป็นคะแนนเต็ม 5 คะแนน (ทศนิยม 2 ตำแหน่ง)
+        let finalScore = ((correctCount / totalItems) * 5).toFixed(2);
+
+        const studentData = {
+            studentId: document.getElementById('studentId').value,
+            fullName: document.getElementById('fullName').value,
+            no: document.getElementById('no').value,
+            section: document.getElementById('section').value,
+            room: document.getElementById('room').value,
+            score: finalScore
+        };
+
+        const submitBtn = document.querySelector('.btn-submit');
+        submitBtn.innerText = "กำลังทำการบันทึกข้อมูล...";
+        submitBtn.disabled = true;
+
+        // เรียกฟังก์ชันเซิร์ฟเวอร์หลังบ้านฝั่ง Apps Script
+        google.script.run.withSuccessHandler(function(response) {
+            alert(`🎉 ส่งผลคะแนนสำเร็จ!\nนักเรียนตอบถูกทั้งหมด ${correctCount} จากทั้งหมด ${totalItems} ช่องย่อย\nคิดเป็นคะแนนรวมสุทธิ: ${finalScore} / 5 คะแนน`);
+            document.getElementById('sheetForm').reset();
+            allInputs.forEach(el => el.classList.remove('input-correct', 'input-incorrect'));
+            submitBtn.innerText = "ส่งบันทึกผลคะแนนไปยังระบบ";
+            submitBtn.disabled = false;
+        }).writeToGoogleSheet(studentData);
+    });
+</script>
+
+</body>
+</html>
