@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>กิจกรรม 2.3 การค้นหาข้อมูลแบบทวิภาค</title>
+    <title>ใบกิจกรรมที่ 2.3 การค้นหาข้อมูลแบบทวิภาค</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -56,7 +56,7 @@
             box-sizing: border-box;
             font-family: 'Sarabun', sans-serif;
         }
-        /* ข้อมูลขั้นตอนวิธีการค้นหาข้อมูลแบบทวิภาค */
+        /* เงื่อนไขข้อที่ 2: ข้อมูลขั้นตอนวิธีการค้นหาข้อมูลแบบทวิภาค (วางด้านล่างส่วนกรอกข้อมูล) */
         .algo-box {
             background: #f0fdf4;
             border-left: 5px solid #16a34a;
@@ -131,6 +131,7 @@
             border-color: #ef4444 !important;
             background-color: #fef2f2;
         }
+        /* เงื่อนไขข้อที่ 1: ข้อความรอบที่ 5 สิ้นสุดการทำงานตายตัว */
         .text-fixed-finish {
             color: #dc2626;
             font-weight: bold;
@@ -191,8 +192,8 @@
 <body>
 
 <div class="container">
-    <h2>กิจกรรม 2.3 การค้นหาข้อมูลแบบทวิภาค</h2>
-   
+    <h2>ใบกิจกรรมที่ 2.3 การค้นหาข้อมูลแบบทวิภาค</h2>
+    <div class="subtitle">วิชาเทคโนโลยี (วิทยาการคำนวณ)</div>
     
     <form id="sheetForm">
         <div class="student-info">
@@ -218,7 +219,7 @@
             </div>
             <div>
                 <label>ห้อง</label>
-                <input type="text" id="room" required placeholder="เช่น 1">
+                <input type="text" id="room" required placeholder="เช่น ม.4/1">
             </div>
         </div>
 
@@ -228,16 +229,16 @@
             <strong>ข้อมูลออก:</strong> ค่าดัชนี i ในรายการ L ที่บอกตำแหน่งของ target (หากไม่พบข้อมูลจะคืนค่าบรรลุเงื่อนไขสิ้นสุด)<br>
             <strong>ขั้นตอนวิธี:</strong>
             <ol>
-                <li>ให้ n แทนจำนวนข้อมูลในรายการ L</li>
-                <li>ให้ left = 1</li>
-                <li>ให้ right = n </li>
-                <li>ทำซ้ำในขณะที่ left = right:
+                <li>ให้ n &leftarrow; จำนวนข้อมูลในรายการ L</li>
+                <li>ให้ left &leftarrow; 1</li>
+                <li>ให้ right &leftarrow; n</li>
+                <li>ทำซ้ำในขณะที่ left &le; right:
                     <ul>
-                        <li>ให้ mid มีค่า (left + right) / 2 ปัดเศษทิ้ง </li>
-                        <li>ให้ x แทนข้อมูลในรายการ L ณ ตำแหน่งดัชนี mid </li>
-                        <li>ถ้า x เท่ากับ target ให้ <strong>คืนค่าดัชนี mid$และจบการทำงาน</strong></li>
-                        <li>ถ้า x มากกว่า target ให้ right   มีค่า mid - 1</li>
-                        <li>ถ้า x น้อยกว่า target ให้ left    มีค่า mid + 1</li>
+                        <li>ให้ mid &leftarrow; &lfloor;(left + right) / 2&rfloor;</li>
+                        <li>ให้ x &leftarrow; ข้อมูลในรายการ L ณ ตำแหน่งดัชนี mid</li>
+                        <li>ถ้า x เท่ากับ target ให้ <strong>คืนค่าดัชนี mid และจบการทำงาน</strong></li>
+                        <li>ถ้า x มากกว่า target ให้ right &leftarrow; mid - 1</li>
+                        <li>ถ้า x น้อยกว่า target ให้ left &leftarrow; mid + 1</li>
                     </ul>
                 </li>
             </ol>
@@ -279,7 +280,7 @@
             </table>
         </div>
 
-        <p><strong>คำชี้แจงส่วนที่ 2:</strong> แสดงขั้นตอนวิธีค้นหาข้อมูล target = 12 กำหนดให้ n = 18 โดยเติมคำตอบลงในช่องว่างของตารางให้สมบูรณ์ (24 ช่องคำตอบ)</p>
+        <p><strong>คำชี้แจงส่วนที่ 2:</strong> แสดงขั้นตอนวิธีค้นหาข้อมูล target = 12 กำหนดให้ n = 18 โดยเติมคำตอบลงในช่องว่างของตารางให้สมบูรณ์ (ทุกช่องกลายเป็นช่องเติมคำตอบ ยกเว้นรอบที่ 5 คอลัมน์ขวาสุด)</p>
         
         <div class="table-responsive">
             <table>
@@ -379,7 +380,7 @@
 </div>
 
 <script>
-    // ป๊อบอัพแจ้งเตือนหากเติมคำตอบผิดแบบ Real-time
+    // ดักจับและแจ้งเตือนเมื่อตอบผิดแบบ Real-time
     const allInputs = document.querySelectorAll('.target-item');
     allInputs.forEach(input => {
         input.addEventListener('change', function() {
@@ -390,7 +391,7 @@
                 if (userAns !== correctAns) {
                     this.classList.remove('input-correct');
                     this.classList.add('input-incorrect');
-                    openModal(); // สั่งให้ป๊อบอัพเด้งแจ้งเตือน
+                    openModal(); // สั่งป๊อบอัพเตือนนักเรียนทำงานผิดขั้นตอน
                 } else {
                     this.classList.remove('input-incorrect');
                     this.classList.add('input-correct');
@@ -409,12 +410,12 @@
         document.getElementById('alertModal').style.display = 'none';
     }
 
-    // คำนวณคะแนนรวมทุกช่อง (18 + 24 = 42 ช่องคำตอบ) และแปลงเป็นสัดส่วนเต็ม 5 คะแนนเต็ม
+    // ประมวลผลสัดส่วนคะแนนรวม (18 + 24 = 42 ช่องคำตอบ) ให้ทอนคะแนนเหลือเต็ม 5 เสมอ
     document.getElementById('sheetForm').addEventListener('submit', function(e) {
         e.preventDefault();
         
         let correctCount = 0;
-        const totalItems = allInputs.length; // รวมทั้งหมด 42 ช่องคำตอบในปัจจุบัน
+        const totalItems = allInputs.length; // รวม 42 ช่องคำตอบ
 
         allInputs.forEach(input => {
             if (input.value.trim() === input.getAttribute('data-ans')) {
@@ -422,7 +423,7 @@
             }
         });
 
-        // คิดคำนวณและทอนลงเป็นคะแนนเต็ม 5 คะแนน (ทศนิยม 2 ตำแหน่ง)
+        // สูตรคำนวณทอนคะแนนย่อยทั้งหมดให้เหลือเป็นคะแนนดิบเต็ม 5 คะแนน
         let finalScore = ((correctCount / totalItems) * 5).toFixed(2);
 
         const studentData = {
@@ -438,9 +439,9 @@
         submitBtn.innerText = "กำลังทำการบันทึกข้อมูล...";
         submitBtn.disabled = true;
 
-        // เรียกฟังก์ชันเซิร์ฟเวอร์หลังบ้านฝั่ง Apps Script
+        // เรียกฟังก์ชันเซิร์ฟเวอร์หลังบ้านฝั่ง Apps Script และฝังลิงก์ Web App ที่ระบุไว้ในระบบแจ้งเตือนสำเร็จ
         google.script.run.withSuccessHandler(function(response) {
-            alert(`🎉 ส่งผลคะแนนสำเร็จ!\nนักเรียนตอบถูกทั้งหมด ${correctCount} จากทั้งหมด ${totalItems} ช่องย่อย\nคิดเป็นคะแนนรวมสุทธิ: ${finalScore} / 5 คะแนน`);
+            alert(`🎉 ส่งผลคะแนนสำเร็จไปยังลิงก์เว็บแอป:\nhttps://script.google.com/macros/s/AKfycbwqaCRFsVsfLmI-o8cVNaYvYO8e9nfRGbjoM8U0rVGc9UOKpSwKwXOsCIWssqUrFyP1KA/exec\n\nนักเรียนตอบถูกต้องทั้งหมด ${correctCount} จาก ${totalItems} ช่องย่อย\nคิดเป็นคะแนนรวม: ${finalScore} / 5 คะแนน`);
             document.getElementById('sheetForm').reset();
             allInputs.forEach(el => el.classList.remove('input-correct', 'input-incorrect'));
             submitBtn.innerText = "ส่งบันทึกผลคะแนนไปยังระบบ";
