@@ -56,7 +56,7 @@
             box-sizing: border-box;
             font-family: 'Sarabun', sans-serif;
         }
-        /* เงื่อนไขข้อที่ 2: ข้อมูลขั้นตอนวิธีการค้นหาข้อมูลแบบทวิภาค (วางด้านล่างส่วนกรอกข้อมูล) */
+        /* ข้อมูลขั้นตอนวิธีการค้นหาข้อมูลแบบทวิภาค */
         .algo-box {
             background: #f0fdf4;
             border-left: 5px solid #16a34a;
@@ -131,15 +131,39 @@
             border-color: #ef4444 !important;
             background-color: #fef2f2;
         }
-        /* เงื่อนไขข้อที่ 1: ข้อความรอบที่ 5 สิ้นสุดการทำงานตายตัว */
         .text-fixed-finish {
             color: #dc2626;
             font-weight: bold;
             font-size: 14.5px;
         }
+        /* จัดวางส่วนท้าย: ปุ่มกดส่งคู่กับคะแนนเรียบร้อยแบบเรียลไทม์ */
+        .submit-area {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-top: 25px;
+        }
+        .live-score-container {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e3a8a;
+            background: #e0f2fe;
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: 1px solid #bae6fd;
+            white-space: nowrap;
+        }
+        #liveScore {
+            color: #2563eb;
+            font-size: 22px;
+        }
         .btn-submit {
-            display: block;
-            width: 100%;
+            flex-grow: 1;
             padding: 14px;
             background-color: #2563eb;
             color: white;
@@ -149,7 +173,6 @@
             font-weight: 600;
             cursor: pointer;
             transition: background 0.2s;
-            margin-top: 20px;
         }
         .btn-submit:hover {
             background-color: #1d4ed8;
@@ -192,8 +215,8 @@
 <body>
 
 <div class="container">
-    <h2>กิจกรรม 2.3 การค้นหาข้อมูลแบบทวิภาค</h2>
-
+    <h2>ใบกิจกรรมที่ 2.3 การค้นหาข้อมูลแบบทวิภาค</h2>
+    <div class="subtitle">วิชาเทคโนโลยี (วิทยาการคำนวณ)</div>
     
     <form id="sheetForm">
         <div class="student-info">
@@ -219,11 +242,11 @@
             </div>
             <div>
                 <label>ห้อง</label>
-                <input type="text" id="room" required placeholder="เช่น ม.4/1">
+                <input type="text" id="room" required placeholder="เช่น 1">
             </div>
         </div>
 
-       <div class="algo-box">
+      <div class="algo-box">
             <h4>💡 ขั้นตอนวิธี : การค้นหาข้อมูลแบบทวิภาค (Binary Search Algorithm)</h4>
             <strong>ข้อมูลเข้า:</strong> รายการ L ที่มีข้อมูลการเรียงลำดับจากน้อยไปหามาก และข้อมูลที่ต้องการค้นหา (target)<br>
             <strong>ข้อมูลออก:</strong> ค่าดัชนี i ในรายการ L ที่บอกตำแหน่งของ target (หากไม่พบข้อมูลจะคืนค่าบรรลุเงื่อนไขสิ้นสุด)<br>
@@ -280,7 +303,7 @@
             </table>
         </div>
 
-        <p><strong>คำชี้แจงส่วนที่ 2:</strong> แสดงขั้นตอนวิธีค้นหาข้อมูล target = 12 กำหนดให้ n = 18 โดยเติมคำตอบลงในช่องว่างของตารางให้สมบูรณ์ (ทุกช่องกลายเป็นช่องเติมคำตอบ ยกเว้นรอบที่ 5 คอลัมน์ขวาสุด)</p>
+        <p><strong>คำชี้แจงส่วนที่ 2:</strong> แสดงขั้นตอนวิธีค้นหาข้อมูล target = 12 กำหนดให้ n = 18 โดยเติมคำตอบลงในช่องว่างของตารางให้สมบูรณ์</p>
         
         <div class="table-responsive">
             <table>
@@ -367,7 +390,12 @@
             </table>
         </div>
 
-        <button type="submit" class="btn-submit">ส่งบันทึกผลคะแนนไปยังระบบ</button>
+        <div class="submit-area">
+            <button type="submit" class="btn-submit">ส่งบันทึกผลคะแนนไปยังระบบ</button>
+            <div class="live-score-container">
+                คะแนนปัจจุบัน: <span id="liveScore">0.00</span> / 5
+            </div>
+        </div>
     </form>
 </div>
 
@@ -380,8 +408,26 @@
 </div>
 
 <script>
-    // ดักจับและแจ้งเตือนเมื่อตอบผิดแบบ Real-time
     const allInputs = document.querySelectorAll('.target-item');
+    const liveScoreDisplay = document.getElementById('liveScore');
+
+    // ฟังก์ชันสำหรับคำนวณคะแนนแบบเรียลไทม์ (Real-time Score Calculation)
+    function updateLiveScore() {
+        let correctCount = 0;
+        const totalItems = allInputs.length; // 42 ช่องคำตอบ
+
+        allInputs.forEach(input => {
+            if (input.value.trim() === input.getAttribute('data-ans')) {
+                correctCount++;
+            }
+        });
+
+        // คำนวณทอนสัดส่วนให้เป็น 5 คะแนนเต็ม
+        let currentScore = ((correctCount / totalItems) * 5).toFixed(2);
+        liveScoreDisplay.innerText = currentScore;
+    }
+
+    // ดักจับเหตุการณ์การกรอกข้อมูลเพื่อแจ้งเตือน Real-time และอัปเดตคะแนนข้างปุ่มส่งทันที
     allInputs.forEach(input => {
         input.addEventListener('change', function() {
             const userAns = this.value.trim();
@@ -391,7 +437,7 @@
                 if (userAns !== correctAns) {
                     this.classList.remove('input-correct');
                     this.classList.add('input-incorrect');
-                    openModal(); // สั่งป๊อบอัพเตือนนักเรียนทำงานผิดขั้นตอน
+                    openModal(); // แจ้งเตือนเมื่อผิดขั้นตอน
                 } else {
                     this.classList.remove('input-incorrect');
                     this.classList.add('input-correct');
@@ -399,6 +445,9 @@
             } else {
                 this.classList.remove('input-correct', 'input-incorrect');
             }
+            
+            // อัปเดตคะแนนข้างปุ่มทันทีเมื่อมีการเปลี่ยนแปลงคำตอบ
+            updateLiveScore();
         });
     });
 
@@ -410,12 +459,12 @@
         document.getElementById('alertModal').style.display = 'none';
     }
 
-    // ประมวลผลสัดส่วนคะแนนรวม (18 + 24 = 42 ช่องคำตอบ) ให้ทอนคะแนนเหลือเต็ม 5 เสมอ
+    // ส่วนการกดส่งข้อมูลฟอร์ม
     document.getElementById('sheetForm').addEventListener('submit', function(e) {
         e.preventDefault();
         
         let correctCount = 0;
-        const totalItems = allInputs.length; // รวม 42 ช่องคำตอบ
+        const totalItems = allInputs.length;
 
         allInputs.forEach(input => {
             if (input.value.trim() === input.getAttribute('data-ans')) {
@@ -423,7 +472,6 @@
             }
         });
 
-        // สูตรคำนวณทอนคะแนนย่อยทั้งหมดให้เหลือเป็นคะแนนดิบเต็ม 5 คะแนน
         let finalScore = ((correctCount / totalItems) * 5).toFixed(2);
 
         const studentData = {
@@ -439,11 +487,11 @@
         submitBtn.innerText = "กำลังทำการบันทึกข้อมูล...";
         submitBtn.disabled = true;
 
-        // เรียกฟังก์ชันเซิร์ฟเวอร์หลังบ้านฝั่ง Apps Script และฝังลิงก์ Web App ที่ระบุไว้ในระบบแจ้งเตือนสำเร็จ
         google.script.run.withSuccessHandler(function(response) {
-            alert(`🎉 ส่งผลคะแนนสำเร็จไปยังลิงก์เว็บแอป:\nhttps://script.google.com/macros/s/AKfycbzcpLwBV--YXOjBOXmVzwe9eISU9m0OGfBwzUJTksRb3GmPhxFJ9jY3sh9chZAVris2Xw/exec\n\nนักเรียนตอบถูกต้องทั้งหมด ${correctCount} จาก ${totalItems} ช่องย่อย\nคิดเป็นคะแนนรวม: ${finalScore} / 5 คะแนน`);
+            alert(`🎉 ส่งผลคะแนนสำเร็จไปยังลิงก์เว็บแอป:\nhttps://script.google.com/macros/s/AKfycbwynInQi4ILXI6L6TGmjvadXmvociJMcYqIKJPnCT1AOSLcLLRmwdqaRgb1GBZj9GpLjw/exec\n\nบันทึกคะแนนเรียบร้อย: ${finalScore} / 5 คะแนน`);
             document.getElementById('sheetForm').reset();
             allInputs.forEach(el => el.classList.remove('input-correct', 'input-incorrect'));
+            liveScoreDisplay.innerText = "0.00"; // รีเซ็ตคะแนนหน้าจอหลังส่งสำเร็จ
             submitBtn.innerText = "ส่งบันทึกผลคะแนนไปยังระบบ";
             submitBtn.disabled = false;
         }).writeToGoogleSheet(studentData);
