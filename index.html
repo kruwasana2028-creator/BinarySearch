@@ -406,7 +406,7 @@
     // ==========================================
     // ⚙️ วางลิงก์ Web App URL ที่ได้จาก Google Apps Script ตรงนี้
     // ==========================================
-    const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyOpucV0MtYRXGOFiCSseTXbDzs11CB3jfiCGOn02pIcabmzj5oNL8w3TCT_QCgQsUd/exec";
+    const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyXci0TSrzcUISkESw34YRvXorD9m5n2r9RhY7-Z-RKn9LfR0JOsmY10fCJG9Dmdbxy/exec";
     // ==========================================
 
     const allInputs = document.querySelectorAll('.target-item');
@@ -444,7 +444,7 @@
 
     function closeModal() { document.getElementById('alertModal').style.display = 'none'; }
 
-    // 🔴 ส่วนที่เปลี่ยนใหม่: ยิงเข้า Google Sheet โดยตรงไม่ผ่าน Form
+   // 🔴 ปรับปรุงใหม่: ส่งข้อมูลในรูปแบบ Form Data เพื่อรองรับ Google Apps Script ได้ดีที่สุด
     form.addEventListener('submit', function(e) {
         e.preventDefault(); // ป้องกันหน้าเว็บรีเฟรช
 
@@ -458,26 +458,22 @@
         });
         let finalScore = ((correctCount / allInputs.length) * 5).toFixed(2);
 
-        // มัดรวมข้อมูลเป็นก้อน JSON
-        const payload = {
-            studentId: document.getElementById('studentId').value,
-            fullName: document.getElementById('fullName').value,
-            no: document.getElementById('no').value,
-            section: document.getElementById('section').value,
-            room: document.getElementById('room').value,
-            score: finalScore
-        };
+        // แปลงข้อมูลให้อยู่ในรูปแบบ URLSearchParams (แก้ปัญหา CORS ได้ดีที่สุด)
+        const formData = new URLSearchParams();
+        formData.append('studentId', document.getElementById('studentId').value);
+        formData.append('fullName', document.getElementById('fullName').value);
+        formData.append('no', document.getElementById('no').value);
+        formData.append('section', document.getElementById('section').value);
+        formData.append('room', document.getElementById('room').value);
+        formData.append('score', finalScore);
 
         // ใช้ fetch ยิงส่งข้อมูลไปยัง Google Sheets API
         fetch(GOOGLE_WEB_APP_URL, {
             method: 'POST',
-            mode: 'no-cors', // ตั้งค่าเป็น no-cors เพื่อให้ยิงข้ามโดเมนจาก GitHub ไป Google ได้โดยไม่ติดเรื่องความปลอดภัย (CORS)
-            cache: 'no-cache',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: formData // ส่งเป็นก้อนข้อมูลฟอร์ม
         })
-        .then(() => {
-            // เนื่องจากใช้โหมด no-cors เราจะไม่สามารถอ่านการตอบกลับได้ แต่ถ้าคำสั่งทำงานสำเร็จ (ข้อมูลถูกส่งไปแล้ว) จะเข้าบล็อกนี้ทันที
+        .then(response => {
+            // ปลดล็อกให้สามารถแจ้งเตือนผลที่แท้จริงจาก Google Apps Script ได้
             alert(`🎉 บันทึกผลคะแนนสำเร็จไปยังระบบ!\n\nบันทึกคะแนนเรียบร้อย: ${finalScore} / 5 คะแนน`);
             
             // รีเซ็ตฟอร์มเคลียร์ค่าใหม่
