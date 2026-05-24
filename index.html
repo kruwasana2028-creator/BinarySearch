@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ใบกิจกรรมที่ 2.3 การค้นหาข้อมูลแบบทวิภาค</title>
+    <title>กิจกรรม 2.3 การค้นหาข้อมูลแบบทวิภาค</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -192,8 +192,8 @@
 <body>
 
 <div class="container">
-    <h2>ใบกิจกรรมที่ 2.3 การค้นหาข้อมูลแบบทวิภาค</h2>
-    <div class="subtitle">วิชาเทคโนโลยี (วิทยาการคำนวณ)</div>
+    <h2>กิจกรรม 2.3 การค้นหาข้อมูลแบบทวิภาค</h2>
+
     
     <form id="sheetForm">
         <div class="student-info">
@@ -223,22 +223,22 @@
             </div>
         </div>
 
-        <div class="algo-box">
+       <div class="algo-box">
             <h4>💡 ขั้นตอนวิธี : การค้นหาข้อมูลแบบทวิภาค (Binary Search Algorithm)</h4>
             <strong>ข้อมูลเข้า:</strong> รายการ L ที่มีข้อมูลการเรียงลำดับจากน้อยไปหามาก และข้อมูลที่ต้องการค้นหา (target)<br>
             <strong>ข้อมูลออก:</strong> ค่าดัชนี i ในรายการ L ที่บอกตำแหน่งของ target (หากไม่พบข้อมูลจะคืนค่าบรรลุเงื่อนไขสิ้นสุด)<br>
             <strong>ขั้นตอนวิธี:</strong>
             <ol>
-                <li>ให้ n &leftarrow; จำนวนข้อมูลในรายการ L</li>
-                <li>ให้ left &leftarrow; 1</li>
-                <li>ให้ right &leftarrow; n</li>
-                <li>ทำซ้ำในขณะที่ left &le; right:
+                <li>ให้ n แทนจำนวนข้อมูลในรายการ L</li>
+                <li>ให้ left = 1</li>
+                <li>ให้ right = n </li>
+                <li>ทำซ้ำในขณะที่ left = right:
                     <ul>
-                        <li>ให้ mid &leftarrow; &lfloor;(left + right) / 2&rfloor;</li>
-                        <li>ให้ x &leftarrow; ข้อมูลในรายการ L ณ ตำแหน่งดัชนี mid</li>
-                        <li>ถ้า x เท่ากับ target ให้ <strong>คืนค่าดัชนี mid และจบการทำงาน</strong></li>
-                        <li>ถ้า x มากกว่า target ให้ right &leftarrow; mid - 1</li>
-                        <li>ถ้า x น้อยกว่า target ให้ left &leftarrow; mid + 1</li>
+                        <li>ให้ mid มีค่า (left + right) / 2 ปัดเศษทิ้ง </li>
+                        <li>ให้ x แทนข้อมูลในรายการ L ณ ตำแหน่งดัชนี mid </li>
+                        <li>ถ้า x เท่ากับ target ให้ <strong>คืนค่าดัชนี mid$และจบการทำงาน</strong></li>
+                        <li>ถ้า x มากกว่า target ให้ right   มีค่า mid - 1</li>
+                        <li>ถ้า x น้อยกว่า target ให้ left    มีค่า mid + 1</li>
                     </ul>
                 </li>
             </ol>
@@ -441,7 +441,7 @@
 
         // เรียกฟังก์ชันเซิร์ฟเวอร์หลังบ้านฝั่ง Apps Script และฝังลิงก์ Web App ที่ระบุไว้ในระบบแจ้งเตือนสำเร็จ
         google.script.run.withSuccessHandler(function(response) {
-            alert(`🎉 ส่งผลคะแนนสำเร็จไปยังลิงก์เว็บแอป:\nhttps://script.google.com/macros/s/AKfycbwqaCRFsVsfLmI-o8cVNaYvYO8e9nfRGbjoM8U0rVGc9UOKpSwKwXOsCIWssqUrFyP1KA/exec\n\nนักเรียนตอบถูกต้องทั้งหมด ${correctCount} จาก ${totalItems} ช่องย่อย\nคิดเป็นคะแนนรวม: ${finalScore} / 5 คะแนน`);
+            alert(`🎉 ส่งผลคะแนนสำเร็จไปยังลิงก์เว็บแอป:\nhttps://script.google.com/macros/s/AKfycbzcpLwBV--YXOjBOXmVzwe9eISU9m0OGfBwzUJTksRb3GmPhxFJ9jY3sh9chZAVris2Xw/exec\n\nนักเรียนตอบถูกต้องทั้งหมด ${correctCount} จาก ${totalItems} ช่องย่อย\nคิดเป็นคะแนนรวม: ${finalScore} / 5 คะแนน`);
             document.getElementById('sheetForm').reset();
             allInputs.forEach(el => el.classList.remove('input-correct', 'input-incorrect'));
             submitBtn.innerText = "ส่งบันทึกผลคะแนนไปยังระบบ";
