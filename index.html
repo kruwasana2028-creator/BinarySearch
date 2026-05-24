@@ -136,7 +136,7 @@
             font-weight: bold;
             font-size: 14.5px;
         }
-        /* จัดวางส่วนท้าย: ปุ่มกดส่งคู่กับคะแนนเรียบร้อยแบบเรียลไทม์ */
+        /* จัดวางส่วนท้าย: ปุ่มกดส่งคู่กับคะแนนเรียบร้อยแบบเรียลไทม์เคียงข้างกัน */
         .submit-area {
             display: flex;
             align-items: center;
@@ -216,7 +216,7 @@
 
 <div class="container">
     <h2>กิจกรรม 2.3 การค้นหาข้อมูลแบบทวิภาค</h2>
-   
+    <div class="subtitle">วิชาเทคโนโลยี (วิทยาการคำนวณ)</div>
     
     <form id="sheetForm">
         <div class="student-info">
@@ -246,22 +246,22 @@
             </div>
         </div>
 
-      <div class="algo-box">
+        <div class="algo-box">
             <h4>💡 ขั้นตอนวิธี : การค้นหาข้อมูลแบบทวิภาค (Binary Search Algorithm)</h4>
             <strong>ข้อมูลเข้า:</strong> รายการ L ที่มีข้อมูลการเรียงลำดับจากน้อยไปหามาก และข้อมูลที่ต้องการค้นหา (target)<br>
             <strong>ข้อมูลออก:</strong> ค่าดัชนี i ในรายการ L ที่บอกตำแหน่งของ target (หากไม่พบข้อมูลจะคืนค่าบรรลุเงื่อนไขสิ้นสุด)<br>
             <strong>ขั้นตอนวิธี:</strong>
             <ol>
                 <li>ให้ n แทนจำนวนข้อมูลในรายการ L</li>
-                <li>ให้ left = 1</li>
-                <li>ให้ right = n </li>
-                <li>ทำซ้ำในขณะที่ left = right:
+                <li>ให้ left &leftarrow; 1</li>
+                <li>ให้ right &leftarrow; n </li>
+                <li>ทำซ้ำในขณะที่ left &le; right:
                     <ul>
-                        <li>ให้ mid มีค่า (left + right) / 2 ปัดเศษทิ้ง </li>
+                        <li>ให้ mid มีค่า &lfloor;(left + right) / 2&rfloor; ปัดเศษทิ้ง </li>
                         <li>ให้ x แทนข้อมูลในรายการ L ณ ตำแหน่งดัชนี mid </li>
                         <li>ถ้า x เท่ากับ target ให้ <strong>คืนค่าดัชนี mid และจบการทำงาน</strong></li>
-                        <li>ถ้า x มากกว่า target ให้ right   มีค่า mid - 1</li>
-                        <li>ถ้า x น้อยกว่า target ให้ left    มีค่า mid + 1</li>
+                        <li>ถ้า x มากกว่า target ให้ right มีค่า mid - 1</li>
+                        <li>ถ้า x น้อยกว่า target ให้ left มีค่า mid + 1</li>
                     </ul>
                 </li>
             </ol>
@@ -411,10 +411,9 @@
     const allInputs = document.querySelectorAll('.target-item');
     const liveScoreDisplay = document.getElementById('liveScore');
 
-    // ฟังก์ชันสำหรับคำนวณคะแนนแบบเรียลไทม์ (Real-time Score Calculation)
     function updateLiveScore() {
         let correctCount = 0;
-        const totalItems = allInputs.length; // 42 ช่องคำตอบ
+        const totalItems = allInputs.length;
 
         allInputs.forEach(input => {
             if (input.value.trim() === input.getAttribute('data-ans')) {
@@ -422,12 +421,10 @@
             }
         });
 
-        // คำนวณทอนสัดส่วนให้เป็น 5 คะแนนเต็ม
         let currentScore = ((correctCount / totalItems) * 5).toFixed(2);
         liveScoreDisplay.innerText = currentScore;
     }
 
-    // ดักจับเหตุการณ์การกรอกข้อมูลเพื่อแจ้งเตือน Real-time และอัปเดตคะแนนข้างปุ่มส่งทันที
     allInputs.forEach(input => {
         input.addEventListener('change', function() {
             const userAns = this.value.trim();
@@ -437,7 +434,7 @@
                 if (userAns !== correctAns) {
                     this.classList.remove('input-correct');
                     this.classList.add('input-incorrect');
-                    openModal(); // แจ้งเตือนเมื่อผิดขั้นตอน
+                    openModal();
                 } else {
                     this.classList.remove('input-incorrect');
                     this.classList.add('input-correct');
@@ -446,7 +443,6 @@
                 this.classList.remove('input-correct', 'input-incorrect');
             }
             
-            // อัปเดตคะแนนข้างปุ่มทันทีเมื่อมีการเปลี่ยนแปลงคำตอบ
             updateLiveScore();
         });
     });
@@ -459,7 +455,6 @@
         document.getElementById('alertModal').style.display = 'none';
     }
 
-    // ส่วนการกดส่งข้อมูลฟอร์ม
     document.getElementById('sheetForm').addEventListener('submit', function(e) {
         e.preventDefault();
         
@@ -487,14 +482,22 @@
         submitBtn.innerText = "กำลังทำการบันทึกข้อมูล...";
         submitBtn.disabled = true;
 
-        google.script.run.withSuccessHandler(function(response) {
-            alert(`🎉 ส่งผลคะแนนสำเร็จไปยังลิงก์เว็บแอป:\nhttps://script.google.com/macros/s/AKfycbwynInQi4ILXI6L6TGmjvadXmvociJMcYqIKJPnCT1AOSLcLLRmwdqaRgb1GBZj9GpLjw/exec\n\nบันทึกคะแนนเรียบร้อย: ${finalScore} / 5 คะแนน`);
-            document.getElementById('sheetForm').reset();
-            allInputs.forEach(el => el.classList.remove('input-correct', 'input-incorrect'));
-            liveScoreDisplay.innerText = "0.00"; // รีเซ็ตคะแนนหน้าจอหลังส่งสำเร็จ
-            submitBtn.innerText = "ส่งบันทึกผลคะแนนไปยังระบบ";
-            submitBtn.disabled = false;
-        }).writeToGoogleSheet(studentData);
+        // เรียกฟังก์ชันหลังบ้านผ่าน Google Apps Script API 
+        google.script.run
+            .withSuccessHandler(function(response) {
+                alert(`🎉 บันทึกผลคะแนนสำเร็จไปยังระบบ!\n\nลิงก์เว็บแอปของคุณ:\nhttps://script.google.com/macros/s/AKfycbyOPRSfkqvNu1xdKShgImxXpC929ohCL32cAvEL7lIQxhOQ5CDiOQfZ-Ad5ytstnVAVIA/exec\n\nบันทึกคะแนนเรียบร้อย: ${finalScore} / 5 คะแนน`);
+                document.getElementById('sheetForm').reset();
+                allInputs.forEach(el => el.classList.remove('input-correct', 'input-incorrect'));
+                liveScoreDisplay.innerText = "0.00";
+                submitBtn.innerText = "ส่งบันทึกผลคะแนนไปยังระบบ";
+                submitBtn.disabled = false;
+            })
+            .withFailureHandler(function(error) {
+                alert(`❌ เกิดข้อผิดพลาดจากระบบ: ${error.message}\nโปรดตรวจสอบสิทธิ์การเข้าถึงและการ Deploy ตาราง Google Sheets`);
+                submitBtn.innerText = "ส่งบันทึกผลคะแนนไปยังระบบ";
+                submitBtn.disabled = false;
+            })
+            .writeToGoogleSheet(studentData);
     });
 </script>
 
