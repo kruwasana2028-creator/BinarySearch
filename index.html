@@ -485,7 +485,7 @@
         // เรียกฟังก์ชันหลังบ้านผ่าน Google Apps Script API 
         google.script.run
             .withSuccessHandler(function(response) {
-                alert(`🎉 บันทึกผลคะแนนสำเร็จไปยังระบบ!\n\nลิงก์เว็บแอปของคุณ:\nhttps://script.google.com/macros/s/AKfycbyOPRSfkqvNu1xdKShgImxXpC929ohCL32cAvEL7lIQxhOQ5CDiOQfZ-Ad5ytstnVAVIA/exec\n\nบันทึกคะแนนเรียบร้อย: ${finalScore} / 5 คะแนน`);
+                alert(`🎉 บันทึกผลคะแนนสำเร็จไปยังระบบ!\n\nลิงก์เว็บแอปของคุณ:\n https://script.google.com/macros/s/AKfycbznHS-NHHCeuT7QPBJrtV2QzWetJ6kxR2bvXEjTP9wzMa2dWopBQavKCtnLpHq7VjGYHA/exec \n\nบันทึกคะแนนเรียบร้อย: ${finalScore} / 5 คะแนน`);
                 document.getElementById('sheetForm').reset();
                 allInputs.forEach(el => el.classList.remove('input-correct', 'input-incorrect'));
                 liveScoreDisplay.innerText = "0.00";
