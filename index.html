@@ -228,16 +228,16 @@
             <strong>ข้อมูลออก:</strong> ค่าดัชนี i ในรายการ L ที่บอกตำแหน่งของ target (หากไม่พบข้อมูลจะคืนค่าบรรลุเงื่อนไขสิ้นสุด)<br>
             <strong>ขั้นตอนวิธี:</strong>
             <ol>
-                <li>ให้ $n$ $\leftarrow$ จำนวนข้อมูลในรายการ L</li>
-                <li>ให้ $left$ $\leftarrow$ $1$</li>
-                <li>ให้ $right$ $\leftarrow$ $n$</li>
-                <li>ทำซ้ำในขณะที่ $left \le right$:
+                <li>ให้ n แทนจำนวนข้อมูลในรายการ L</li>
+                <li>ให้ left = 1</li>
+                <li>ให้ right = n </li>
+                <li>ทำซ้ำในขณะที่ left = right$:
                     <ul>
-                        <li>ให้ $mid$ $\leftarrow$ $\lfloor(left + right) / 2\rfloor$</li>
-                        <li>ให้ $x$ $\leftarrow$ ข้อมูลในรายการ L ณ ตำแหน่งดัชนี $mid$</li>
-                        <li>ถ้า $x$ เท่ากับ $target$ ให้ <strong>คืนค่าดัชนี $mid$ และจบการทำงาน</strong></li>
-                        <li>ถ้า $x$ มากกว่า $target$ ให้ $right$ $\leftarrow$ $mid - 1$</li>
-                        <li>ถ้า $x$ น้อยกว่า $target$ ให้ $left$ $\leftarrow$ $mid + 1$</li>
+                        <li>ให้ mid มีค่า (left + right) / 2 ปัดเศษทิ้ง </li>
+                        <li>ให้ x แทนข้อมูลในรายการ L ณ ตำแหน่งดัชนี mid </li>
+                        <li>ถ้า x เท่ากับ target ให้ <strong>คืนค่าดัชนี mid$และจบการทำงาน</strong></li>
+                        <li>ถ้า x มากกว่า target ให้ right   มีค่า mid - 1</li>
+                        <li>ถ้า x น้อยกว่า target ให้ left    มีค่า mid + 1</li>
                     </ul>
                 </li>
             </ol>
