@@ -31,7 +31,6 @@
             color: #4b5563;
             margin-bottom: 25px;
         }
-        /* ช่องกรอกข้อมูลนักเรียน */
         .student-info {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -56,7 +55,6 @@
             box-sizing: border-box;
             font-family: 'Sarabun', sans-serif;
         }
-        /* ข้อมูลขั้นตอนวิธีการค้นหาข้อมูลแบบทวิภาค */
         .algo-box {
             background: #f0fdf4;
             border-left: 5px solid #16a34a;
@@ -105,7 +103,6 @@
             font-weight: 500;
             min-width: 80px;
         }
-        /* ช่องเติมคำตอบ */
         .quiz-input {
             width: 50px;
             padding: 6px;
@@ -136,7 +133,6 @@
             font-weight: bold;
             font-size: 14.5px;
         }
-        /* จัดวางส่วนท้าย: ปุ่มกดส่งคู่กับคะแนนเรียบร้อยแบบเรียลไทม์เคียงข้างกัน */
         .submit-area {
             display: flex;
             align-items: center;
@@ -177,7 +173,6 @@
         .btn-submit:hover {
             background-color: #1d4ed8;
         }
-        /* ป๊อบอัพแจ้งเตือน (Modal) */
         .modal {
             display: none;
             position: fixed;
@@ -408,33 +403,34 @@
 </div>
 
 <script>
+    // ==========================================
+    // ⚙️ วางลิงก์ Web App URL ที่ได้จาก Google Apps Script ตรงนี้
+    // ==========================================
+    const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyOpucV0MtYRXGOFiCSseTXbDzs11CB3jfiCGOn02pIcabmzj5oNL8w3TCT_QCgQsUd/exec";
+    // ==========================================
+
     const allInputs = document.querySelectorAll('.target-item');
     const liveScoreDisplay = document.getElementById('liveScore');
+    const submitBtn = document.querySelector('.btn-submit');
+    const form = document.getElementById('sheetForm');
 
+    // ฟังก์ชันคำนวณคะแนนสด (เหมือนเดิม)
     function updateLiveScore() {
         let correctCount = 0;
-        const totalItems = allInputs.length;
-
         allInputs.forEach(input => {
-            if (input.value.trim() === input.getAttribute('data-ans')) {
-                correctCount++;
-            }
+            if (input.value.trim() === input.getAttribute('data-ans')) { correctCount++; }
         });
-
-        let currentScore = ((correctCount / totalItems) * 5).toFixed(2);
-        liveScoreDisplay.innerText = currentScore;
+        liveScoreDisplay.innerText = ((correctCount / allInputs.length) * 5).toFixed(2);
     }
 
+    // ตรวจคำตอบตอนนักเรียนพิมพ์ (เหมือนเดิม)
     allInputs.forEach(input => {
         input.addEventListener('change', function() {
-            const userAns = this.value.trim();
-            const correctAns = this.getAttribute('data-ans');
-            
-            if (userAns !== "") {
-                if (userAns !== correctAns) {
+            if (this.value.trim() !== "") {
+                if (this.value.trim() !== this.getAttribute('data-ans')) {
                     this.classList.remove('input-correct');
                     this.classList.add('input-incorrect');
-                    openModal();
+                    document.getElementById('alertModal').style.display = 'flex';
                 } else {
                     this.classList.remove('input-incorrect');
                     this.classList.add('input-correct');
@@ -442,34 +438,28 @@
             } else {
                 this.classList.remove('input-correct', 'input-incorrect');
             }
-            
             updateLiveScore();
         });
     });
 
-    function openModal() {
-        document.getElementById('alertModal').style.display = 'flex';
-    }
+    function closeModal() { document.getElementById('alertModal').style.display = 'none'; }
 
-    function closeModal() {
-        document.getElementById('alertModal').style.display = 'none';
-    }
+    // 🔴 ส่วนที่เปลี่ยนใหม่: ยิงเข้า Google Sheet โดยตรงไม่ผ่าน Form
+    form.addEventListener('submit', function(e) {
+        e.preventDefault(); // ป้องกันหน้าเว็บรีเฟรช
 
-    document.getElementById('sheetForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
+        submitBtn.innerText = "กำลังทำการบันทึกข้อมูล...";
+        submitBtn.disabled = true;
+
+        // คำนวณคะแนนสุทธิ
         let correctCount = 0;
-        const totalItems = allInputs.length;
-
         allInputs.forEach(input => {
-            if (input.value.trim() === input.getAttribute('data-ans')) {
-                correctCount++;
-            }
+            if (input.value.trim() === input.getAttribute('data-ans')) { correctCount++; }
         });
+        let finalScore = ((correctCount / allInputs.length) * 5).toFixed(2);
 
-        let finalScore = ((correctCount / totalItems) * 5).toFixed(2);
-
-        const studentData = {
+        // มัดรวมข้อมูลเป็นก้อน JSON
+        const payload = {
             studentId: document.getElementById('studentId').value,
             fullName: document.getElementById('fullName').value,
             no: document.getElementById('no').value,
@@ -478,28 +468,32 @@
             score: finalScore
         };
 
-        const submitBtn = document.querySelector('.btn-submit');
-        submitBtn.innerText = "กำลังทำการบันทึกข้อมูล...";
-        submitBtn.disabled = true;
-
-        // เรียกฟังก์ชันหลังบ้านผ่าน Google Apps Script API 
-        google.script.run
-            .withSuccessHandler(function(response) {
-                alert(`🎉 บันทึกผลคะแนนสำเร็จไปยังระบบ!\n\nลิงก์เว็บแอปของคุณ:\n https://script.google.com/macros/s/AKfycbznHS-NHHCeuT7QPBJrtV2QzWetJ6kxR2bvXEjTP9wzMa2dWopBQavKCtnLpHq7VjGYHA/exec \n\nบันทึกคะแนนเรียบร้อย: ${finalScore} / 5 คะแนน`);
-                document.getElementById('sheetForm').reset();
-                allInputs.forEach(el => el.classList.remove('input-correct', 'input-incorrect'));
-                liveScoreDisplay.innerText = "0.00";
-                submitBtn.innerText = "ส่งบันทึกผลคะแนนไปยังระบบ";
-                submitBtn.disabled = false;
-            })
-            .withFailureHandler(function(error) {
-                alert(`❌ เกิดข้อผิดพลาดจากระบบ: ${error.message}\nโปรดตรวจสอบสิทธิ์การเข้าถึงและการ Deploy ตาราง Google Sheets`);
-                submitBtn.innerText = "ส่งบันทึกผลคะแนนไปยังระบบ";
-                submitBtn.disabled = false;
-            })
-            .writeToGoogleSheet(studentData);
+        // ใช้ fetch ยิงส่งข้อมูลไปยัง Google Sheets API
+        fetch(GOOGLE_WEB_APP_URL, {
+            method: 'POST',
+            mode: 'no-cors', // ตั้งค่าเป็น no-cors เพื่อให้ยิงข้ามโดเมนจาก GitHub ไป Google ได้โดยไม่ติดเรื่องความปลอดภัย (CORS)
+            cache: 'no-cache',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(() => {
+            // เนื่องจากใช้โหมด no-cors เราจะไม่สามารถอ่านการตอบกลับได้ แต่ถ้าคำสั่งทำงานสำเร็จ (ข้อมูลถูกส่งไปแล้ว) จะเข้าบล็อกนี้ทันที
+            alert(`🎉 บันทึกผลคะแนนสำเร็จไปยังระบบ!\n\nบันทึกคะแนนเรียบร้อย: ${finalScore} / 5 คะแนน`);
+            
+            // รีเซ็ตฟอร์มเคลียร์ค่าใหม่
+            form.reset();
+            allInputs.forEach(el => el.classList.remove('input-correct', 'input-incorrect'));
+            liveScoreDisplay.innerText = "0.00";
+            submitBtn.innerText = "ส่งบันทึกผลคะแนนไปยังระบบ";
+            submitBtn.disabled = false;
+        })
+        .catch(error => {
+            alert('❌ เกิดข้อผิดพลาดในการเชื่อมต่อระบบ กรุณาลองใหม่อีกครั้ง');
+            console.error('Error:', error);
+            submitBtn.innerText = "ส่งบันทึกผลคะแนนไปยังระบบ";
+            submitBtn.disabled = false;
+        });
     });
 </script>
-
 </body>
 </html>
