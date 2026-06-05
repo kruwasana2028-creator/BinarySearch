@@ -135,28 +135,32 @@
         }
         .submit-area {
             display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        .action-row {
+            display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 20px;
-            background: #f8fafc;
-            padding: 15px 20px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            margin-top: 25px;
         }
+        /* ปรับปรุง: ตกแต่งกล่องสรุปคะแนนหลังส่งให้ชัดเจนและสวยงาม */
         .live-score-container {
+            display: none; /* ซ่อนไว้เริ่มต้น */
             font-size: 18px;
             font-weight: 700;
-            color: #1e3a8a;
-            background: #e0f2fe;
-            padding: 10px 20px;
+            color: #166534;
+            background: #f0fdf4;
+            padding: 12px 25px;
             border-radius: 6px;
-            border: 1px solid #bae6fd;
-            white-space: nowrap;
+            border: 2px solid #bbf7d0;
+            text-align: center;
+            animation: fadeIn 0.4s ease-in-out;
         }
         #liveScore {
-            color: #2563eb;
-            font-size: 22px;
+            color: #15803d;
+            font-size: 24px;
         }
         .btn-submit {
             flex-grow: 1;
@@ -168,10 +172,16 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s;
         }
         .btn-submit:hover {
             background-color: #1d4ed8;
+        }
+        .btn-resubmit {
+            background-color: #d97706 !important;
+        }
+        .btn-resubmit:hover {
+            background-color: #b45309 !important;
         }
         .modal {
             display: none;
@@ -204,6 +214,10 @@
             cursor: pointer;
             margin-top: 15px;
             font-family: 'Sarabun', sans-serif;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -386,9 +400,11 @@
         </div>
 
         <div class="submit-area">
-            <button type="submit" class="btn-submit">ส่งบันทึกผลคะแนนไปยังระบบ</button>
-            <div class="live-score-container">
-                คะแนนปัจจุบัน: <span id="liveScore">0.00</span> / 5
+            <div id="scoreBox" class="live-score-container">
+                🎉 บันทึกข้อมูลสำเร็จ! คะแนนรวมทั้งหมดของคุณคือ: <span id="liveScore">0.00</span> / 5 คะแนน
+            </div>
+            <div class="action-row">
+                <button type="submit" class="btn-submit">ส่งบันทึกผลคะแนนไปยังระบบ</button>
             </div>
         </div>
     </form>
@@ -403,27 +419,15 @@
 </div>
 
 <script>
-    // ==========================================
-    // ⚙️ วางลิงก์ Web App URL ที่ได้จาก Google Apps Script ตรงนี้
-    // ==========================================
     const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyXci0TSrzcUISkESw34YRvXorD9m5n2r9RhY7-Z-RKn9LfR0JOsmY10fCJG9Dmdbxy/exec";
-    // ==========================================
 
     const allInputs = document.querySelectorAll('.target-item');
+    const scoreBox = document.getElementById('scoreBox');
     const liveScoreDisplay = document.getElementById('liveScore');
     const submitBtn = document.querySelector('.btn-submit');
     const form = document.getElementById('sheetForm');
 
-    // ฟังก์ชันคำนวณคะแนนสด (เหมือนเดิม)
-    function updateLiveScore() {
-        let correctCount = 0;
-        allInputs.forEach(input => {
-            if (input.value.trim() === input.getAttribute('data-ans')) { correctCount++; }
-        });
-        liveScoreDisplay.innerText = ((correctCount / allInputs.length) * 5).toFixed(2);
-    }
-
-    // ตรวจคำตอบตอนนักเรียนพิมพ์ (เหมือนเดิม)
+    // ตรวจสอบการทำไฮไลท์สีดักความถูกต้องรายกล่อง (แต่จะไม่โชว์คะแนนรวมส่วนท้ายจนกว่าจะกดส่ง)
     allInputs.forEach(input => {
         input.addEventListener('change', function() {
             if (this.value.trim() !== "") {
@@ -438,50 +442,57 @@
             } else {
                 this.classList.remove('input-correct', 'input-incorrect');
             }
-            updateLiveScore();
         });
     });
 
     function closeModal() { document.getElementById('alertModal').style.display = 'none'; }
 
-   // 🔴 ปรับปรุงใหม่: ส่งข้อมูลในรูปแบบ Form Data เพื่อรองรับ Google Apps Script ได้ดีที่สุด
-    form.addEventListener('submit', function(e) {
-        e.preventDefault(); // ป้องกันหน้าเว็บรีเฟรช
-
-        submitBtn.innerText = "กำลังทำการบันทึกข้อมูล...";
-        submitBtn.disabled = true;
-
-        // คำนวณคะแนนสุทธิ
+    // ปรับปรุงฟังก์ชัน: จัดการคำนวณคะแนนและเปิดกล่องแสดงผลรวมคะแนนทั้งหมดแก่ผู้เรียน
+    function processAndShowScore() {
         let correctCount = 0;
         allInputs.forEach(input => {
             if (input.value.trim() === input.getAttribute('data-ans')) { correctCount++; }
         });
         let finalScore = ((correctCount / allInputs.length) * 5).toFixed(2);
+        
+        // แสดงคะแนนลงในกล่องข้อความ
+        liveScoreDisplay.innerText = finalScore;
+        scoreBox.style.display = 'block';
+        
+        // สั่งให้หน้าจอเลื่อนลงมาโฟกัสคะแนนและปุ่มจัดการข้อมูลโดยอัตโนมัติ
+        scoreBox.scrollIntoView({ behavior: 'smooth' });
+        
+        return finalScore;
+    }
 
-        // แปลงข้อมูลให้อยู่ในรูปแบบ URLSearchParams (แก้ปัญหา CORS ได้ดีที่สุด)
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        submitBtn.innerText = "กำลังทำการบันทึกข้อมูล...";
+        submitBtn.disabled = true;
+
+        // ดึงผลคะแนนสุทธิจากการคำนวณส่งไปบันทึก
+        let netScore = processAndShowScore();
+
         const formData = new URLSearchParams();
         formData.append('studentId', document.getElementById('studentId').value);
         formData.append('fullName', document.getElementById('fullName').value);
         formData.append('no', document.getElementById('no').value);
         formData.append('section', document.getElementById('section').value);
         formData.append('room', document.getElementById('room').value);
-        formData.append('score', finalScore);
+        formData.append('score', netScore);
 
-        // ใช้ fetch ยิงส่งข้อมูลไปยัง Google Sheets API
         fetch(GOOGLE_WEB_APP_URL, {
             method: 'POST',
-            body: formData // ส่งเป็นก้อนข้อมูลฟอร์ม
+            body: formData
         })
         .then(response => {
-            // ปลดล็อกให้สามารถแจ้งเตือนผลที่แท้จริงจาก Google Apps Script ได้
-            alert(`🎉 บันทึกผลคะแนนสำเร็จไปยังระบบ!\n\nบันทึกคะแนนเรียบร้อย: ${finalScore} / 5 คะแนน`);
+            alert(`🎉 บันทึกผลคะแนนสำเร็จไปยังระบบ!\n\nผลคะแนนของคุณคือ: ${netScore} / 5 คะแนน`);
             
-            // รีเซ็ตฟอร์มเคลียร์ค่าใหม่
-            form.reset();
-            allInputs.forEach(el => el.classList.remove('input-correct', 'input-incorrect'));
-            liveScoreDisplay.innerText = "0.00";
-            submitBtn.innerText = "ส่งบันทึกผลคะแนนไปยังระบบ";
+            // ปรับปรุงสเต็ปหลังส่ง: เปิดสิทธิ์ให้แก้ไขฟอร์มเดิมและส่งใหม่ได้ (ไม่ใช้ฟังก์ชัน reset เคลียร์ค่าทิ้ง)
             submitBtn.disabled = false;
+            submitBtn.classList.add('btn-resubmit');
+            submitBtn.innerText = "🔄 แก้ไขข้อมูลและส่งบันทึกคะแนนใหม่อีกครั้ง";
         })
         .catch(error => {
             alert('❌ เกิดข้อผิดพลาดในการเชื่อมต่อระบบ กรุณาลองใหม่อีกครั้ง');
