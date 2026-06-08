@@ -20,6 +20,25 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+        /* นาฬิกาจับเวลาแบบลอย */
+        .timer-badge {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #1e3a8a;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-size: 18px;
+            font-weight: 700;
+            z-index: 999;
+            align-items: center;
+            gap: 10px;
+            border: 2px solid #3b82f6;
         }
         h2 {
             text-align: center;
@@ -55,6 +74,34 @@
             box-sizing: border-box;
             font-family: 'Sarabun', sans-serif;
         }
+        /* กล่องคำชี้แจงเรื่องเวลา */
+        .rule-box {
+            background: #fef2f2;
+            border-left: 5px solid #ef4444;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .rule-box h5 {
+            margin: 0 0 8px 0;
+            color: #991b1b;
+            font-size: 16px;
+        }
+        .rule-table {
+            width: 100%;
+            max-width: 400px;
+            margin-top: 8px;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .rule-table th, .rule-table td {
+            padding: 4px 8px;
+            border: 1px solid #fca5a5;
+            text-align: left;
+        }
+        .rule-table th { background: #fee2e2; color: #991b1b; }
+
         .algo-box {
             background: #f0fdf4;
             border-left: 5px solid #16a34a;
@@ -145,17 +192,16 @@
             justify-content: space-between;
             gap: 20px;
         }
-        /* ปรับปรุง: ตกแต่งกล่องสรุปคะแนนหลังส่งให้ชัดเจนและสวยงาม */
         .live-score-container {
-            display: none; /* ซ่อนไว้เริ่มต้น */
-            font-size: 18px;
+            display: none;
+            font-size: 16px;
             font-weight: 700;
             color: #166534;
             background: #f0fdf4;
-            padding: 12px 25px;
+            padding: 15px 25px;
             border-radius: 6px;
             border: 2px solid #bbf7d0;
-            text-align: center;
+            text-align: left;
             animation: fadeIn 0.4s ease-in-out;
         }
         #liveScore {
@@ -197,7 +243,7 @@
             padding: 25px;
             border-radius: 8px;
             text-align: center;
-            max-width: 380px;
+            max-width: 420px;
             width: 85%;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
@@ -223,10 +269,30 @@
 </head>
 <body>
 
+<div id="timerBadge" class="timer-badge">
+    ⏱️ เวลาที่ใช้: <span id="timeDisplay">00:00</span>
+</div>
+
 <div class="container">
     <h2>กิจกรรม 2.3 การค้นหาข้อมูลแบบทวิภาค</h2>
     <div class="subtitle">วิชาเทคโนโลยี (วิทยาการคำนวณ)</div>
     
+    <div class="rule-box">
+        <h5>⚠️ คำชี้แจงและกติกาการทำกิจกรรม (โปรดอ่านก่อนเริ่ม)</h5>
+        * <b>ห้ามเปิดแถบอื่นหรือสลับหน้าจอเด็ดขาด</b> หากระบบตรวจพบจะส่งแจ้งเตือนและนับยอดจำนวนครั้งบันทึกลงสู่ระบบคุณครู<br>
+        * ระบบจะ<b>เริ่มจับเวลาโดยอัตโนมัติ</b> ทันทีที่คุณเริ่มพิมพ์คำตอบลงในกล่องแรกของตารางข้อมูล (ดัชนี 1)<br>
+        * **เกณฑ์เวลาและการคำนวณคะแนน:**
+        <table class="rule-table">
+            <tr><th>เวลาที่ส่งใบงาน</th><th>การคำนวณคะแนน</th></tr>
+            <tr><td>น้อยกว่าหรือเท่ากับ 15 นาที</td><td>ไม่หักคะแนน</td></tr>
+            <tr><td>ตั้งแต่ 17 นาทีขึ้นไป</td><td>หัก 1 คะแนน</td></tr>
+            <tr><td>ตั้งแต่ 19 นาทีขึ้นไป</td><td>หัก 2 คะแนน</td></tr>
+            <tr><td>ตั้งแต่ 21 นาทีขึ้นไป</td><td>หัก 3 คะแนน</td></tr>
+            <tr><td>ตั้งแต่ 23 นาทีขึ้นไป</td><td>หัก 4 คะแนน</td></tr>
+            <tr><td>ตั้งแต่ 25 นาทีขึ้นไป</td><td>หัก 5 คะแนน</td></tr>
+        </table>
+    </div>
+
     <form id="sheetForm">
         <div class="student-info">
             <div>
@@ -401,7 +467,12 @@
 
         <div class="submit-area">
             <div id="scoreBox" class="live-score-container">
-                🎉 บันทึกข้อมูลสำเร็จ! คะแนนรวมทั้งหมดของคุณคือ: <span id="liveScore">0.00</span> / 5 คะแนน
+                🎉 บันทึกข้อมูลสำเร็จ!<br>
+                - คะแนนจากการทำใบงาน: <span id="txtRawScore">0</span>/5 คะแนน<br>
+                - เวลาที่ใช้ทั้งหมด: <span id="txtTimeUsed">0</span> นาที<br>
+                - คะแนนโดนหัก (ส่งช้า): <span id="txtTimePenalty">0</span> คะแนน<br>
+                - สถิติแอบสลับหน้าจอ: <span id="txtCheatCount" style="color: #dc2626; font-weight: bold;">0</span> ครั้ง<br>
+                📌 <b>คะแนนสุทธิรวมทั้งหมดของคุณคือ: <span id="liveScore">0.00</span> / 5 คะแนน</b>
             </div>
             <div class="action-row">
                 <button type="submit" class="btn-submit">ส่งบันทึกผลคะแนนไปยังระบบ</button>
@@ -412,29 +483,64 @@
 
 <div class="modal" id="alertModal">
     <div class="modal-content">
-        <h3>⚠️ คำแจ้งเตือนระบบ</h3>
-        <p>ตัวเลขหรือผลการเปรียบเทียบที่คุณระบุไม่ถูกต้องตามขั้นตอนวิธี กรุณาทบทวนหลักการค้นหาแบบทวิภาคใหม่อีกครั้ง!</p>
+        <h3 id="modalTitle">⚠️ คำแจ้งเตือนระบบ</h3>
+        <p id="modalDesc">ตัวเลขหรือผลการเปรียบเทียบที่คุณระบุไม่ถูกต้องตามขั้นตอนวิธี กรุณาทบทวนหลักการค้นหาแบบทวิภาคใหม่อีกครั้ง!</p>
         <button class="modal-btn" onclick="closeModal()">ตกลง</button>
     </div>
 </div>
 
 <script>
-    const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyBgWScePuUUL2M0QCm6lH2BrVZ7oLp7LXyBrk2Y5L-HBrOcNFjAYjYFF2239QTBodD/exec";
+    const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyXci0TSrzcUISkESw34YRvXorD9m5n2r9RhY7-Z-RKn9LfR0JOsmY10fCJG9Dmdbxy/exec";
 
     const allInputs = document.querySelectorAll('.target-item');
     const scoreBox = document.getElementById('scoreBox');
     const liveScoreDisplay = document.getElementById('liveScore');
     const submitBtn = document.querySelector('.btn-submit');
     const form = document.getElementById('sheetForm');
+    
+    let startTime = null;
+    let timerInterval = null;
+    let totalSecondsUsed = 0;
+    let cheatCount = 0; // เปลี่ยนจาก Boolean มาเป็น ตัวนับจำนวนครั้งการแอบสลับแถบ
 
-    // ตรวจสอบการทำไฮไลท์สีดักความถูกต้องรายกล่อง (แต่จะไม่โชว์คะแนนรวมส่วนท้ายจนกว่าจะกดส่ง)
+    // ตรวจสอบการเปิดแถบอื่นขณะทำข้อสอบ และนับจำนวนครั้งที่สลับหน้าจอออกไป
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden && startTime !== null) { 
+            cheatCount++; // บวกยอดจำนวนครั้งสะสม
+            showSystemModal("🚨 ตรวจพบการแอบเปลี่ยนแถบ!", `ระบบตรวจพบว่าคุณสลับโปรแกรมหรือแอบเปลี่ยนแท็บหน้าจอออกไป (ครั้งที่ ${cheatCount}) ยอดพฤติกรรมนี้จะถูกแจ้งและส่งบันทึกไปยังระบบของคุณครูทันที`);
+        }
+    });
+
+    // เริ่มจับเวลาเมื่อกรอกข้อมูลลงช่องแรก (l1)
+    const firstInput = document.getElementById('l1');
+    firstInput.addEventListener('input', function startTimerOnce() {
+        if (startTime === null) {
+            startTime = new Date();
+            document.getElementById('timerBadge').style.display = 'flex';
+            timerInterval = setInterval(updateTimerDisplay, 1000);
+            firstInput.removeEventListener('input', startTimerOnce); 
+        }
+    });
+
+    function updateTimerDisplay() {
+        if (startTime === null) return;
+        const now = new Date();
+        const diff = Math.floor((now - startTime) / 1000);
+        totalSecondsUsed = diff;
+
+        const mins = Math.floor(diff / 60).toString().padStart(2, '0');
+        const secs = Math.floor(diff % 60).toString().padStart(2, '0');
+        document.getElementById('timeDisplay').innerText = `${mins}:${secs}`;
+    }
+
+    // ตรวจความถูกต้องของคำตอบย่อย
     allInputs.forEach(input => {
         input.addEventListener('change', function() {
             if (this.value.trim() !== "") {
                 if (this.value.trim() !== this.getAttribute('data-ans')) {
                     this.classList.remove('input-correct');
                     this.classList.add('input-incorrect');
-                    document.getElementById('alertModal').style.display = 'flex';
+                    showSystemModal("⚠️ คำแจ้งเตือนระบบ", "ตัวเลขหรือผลการเปรียบเทียบที่คุณระบุไม่ถูกต้องตามขั้นตอนวิธี กรุณาทบทวนหลักการค้นหาแบบทวิภาคใหม่อีกครั้ง!");
                 } else {
                     this.classList.remove('input-incorrect');
                     this.classList.add('input-correct');
@@ -445,34 +551,61 @@
         });
     });
 
+    function showSystemModal(title, desc) {
+        document.getElementById('modalTitle').innerText = title;
+        document.getElementById('modalDesc').innerText = desc;
+        document.getElementById('alertModal').style.display = 'flex';
+    }
+
     function closeModal() { document.getElementById('alertModal').style.display = 'none'; }
 
-    // ปรับปรุงฟังก์ชัน: จัดการคำนวณคะแนนและเปิดกล่องแสดงผลรวมคะแนนทั้งหมดแก่ผู้เรียน
+    // คำนวณผลลัพธ์สุทธิ
     function processAndShowScore() {
         let correctCount = 0;
         allInputs.forEach(input => {
             if (input.value.trim() === input.getAttribute('data-ans')) { correctCount++; }
         });
-        let finalScore = ((correctCount / allInputs.length) * 5).toFixed(2);
         
-        // แสดงคะแนนลงในกล่องข้อความ
-        liveScoreDisplay.innerText = finalScore;
+        let rawScore = (correctCount / allInputs.length) * 5;
+        let timeMinutes = totalSecondsUsed / 60;
+        let timePenalty = 0;
+
+        // เกณฑ์หักคะแนนตามเวลาที่คุณครูกำหนด
+        if (timeMinutes >= 25) { timePenalty = 5; }
+        else if (timeMinutes >= 23) { timePenalty = 4; }
+        else if (timeMinutes >= 21) { timePenalty = 3; }
+        else if (timeMinutes >= 19) { timePenalty = 2; }
+        else if (timeMinutes >= 17) { timePenalty = 1; }
+        
+        let finalScore = rawScore - timePenalty;
+        if (finalScore < 0) finalScore = 0;
+
+        // ดันสถิติและคะแนนขึ้นหน้าจอสรุปท้ายใบงาน
+        document.getElementById('txtRawScore').innerText = rawScore.toFixed(2);
+        document.getElementById('txtTimeUsed').innerText = (totalSecondsUsed / 60).toFixed(2);
+        document.getElementById('txtTimePenalty').innerText = timePenalty;
+        document.getElementById('txtCheatCount').innerText = cheatCount; // แสดงจำนวนครั้งที่นับได้
+        liveScoreDisplay.innerText = finalScore.toFixed(2);
+        
         scoreBox.style.display = 'block';
-        
-        // สั่งให้หน้าจอเลื่อนลงมาโฟกัสคะแนนและปุ่มจัดการข้อมูลโดยอัตโนมัติ
         scoreBox.scrollIntoView({ behavior: 'smooth' });
         
-        return finalScore;
+        return {
+            finalScore: finalScore.toFixed(2),
+            timeUsedStr: (totalSecondsUsed / 60).toFixed(2),
+            timePenalty: timePenalty,
+            cheatCount: cheatCount
+        };
     }
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
+        clearInterval(timerInterval); // หยุดจับเวลา
 
         submitBtn.innerText = "กำลังทำการบันทึกข้อมูล...";
         submitBtn.disabled = true;
 
-        // ดึงผลคะแนนสุทธิจากการคำนวณส่งไปบันทึก
-        let netScore = processAndShowScore();
+        let scoreDetails = processAndShowScore();
 
         const formData = new URLSearchParams();
         formData.append('studentId', document.getElementById('studentId').value);
@@ -480,16 +613,24 @@
         formData.append('no', document.getElementById('no').value);
         formData.append('section', document.getElementById('section').value);
         formData.append('room', document.getElementById('room').value);
-        formData.append('score', netScore);
+        formData.append('score', scoreDetails.finalScore);
+        formData.append('timeUsed', scoreDetails.timeUsedStr);
+        formData.append('cheated', `แอบสลับหน้าจอ ${scoreDetails.cheatCount} ครั้ง`); // บันทึกข้อความเป็นตัวเลขจำนวนครั้งลง Sheet
 
         fetch(GOOGLE_WEB_APP_URL, {
             method: 'POST',
             body: formData
         })
         .then(response => {
-            alert(`🎉 บันทึกผลคะแนนสำเร็จไปยังระบบ!\n\nผลคะแนนของคุณคือ: ${netScore} / 5 คะแนน`);
+            // แจ้งเตือนป๊อปอัพคะแนนสุทธิหลังกดส่งสำเร็จ
+            alert(`🎉 บันทึกผลคะแนนสำเร็จไปยังระบบคุณครูแล้ว!\n\n` + 
+                  `----------------------------------------\n` +
+                  `👤 ชื่อ-นามสกุล: ${document.getElementById('fullName').value}\n` +
+                  `⏱️ เวลาที่ใช้ทำทั้งหมด: ${scoreDetails.timeUsedStr} นาที\n` +
+                  `❌ คะแนนโดนหักเวลาช้า: -${scoreDetails.timePenalty} คะแนน\n` +
+                  `👁️ พฤติกรรมสลับหน้าจอ: แอบสลับ ${scoreDetails.cheatCount} ครั้ง\n` +
+                  `🎯 คะแนนสุทธิที่ได้: ${scoreDetails.finalScore} / 5 คะแนน`);
             
-            // ปรับปรุงสเต็ปหลังส่ง: เปิดสิทธิ์ให้แก้ไขฟอร์มเดิมและส่งใหม่ได้ (ไม่ใช้ฟังก์ชัน reset เคลียร์ค่าทิ้ง)
             submitBtn.disabled = false;
             submitBtn.classList.add('btn-resubmit');
             submitBtn.innerText = "🔄 แก้ไขข้อมูลและส่งบันทึกคะแนนใหม่อีกครั้ง";
