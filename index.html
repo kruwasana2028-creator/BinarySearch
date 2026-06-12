@@ -22,7 +22,6 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
             position: relative;
         }
-        /* นาฬิกาจับเวลาแบบลอย */
         .timer-badge {
             display: none;
             position: fixed;
@@ -74,7 +73,6 @@
             box-sizing: border-box;
             font-family: 'Sarabun', sans-serif;
         }
-        /* กล่องคำชี้แจงเรื่องเวลา */
         .rule-box {
             background: #fef2f2;
             border-left: 5px solid #ef4444;
@@ -342,8 +340,8 @@
             </ol>
         </div>
 
-        <div class="data-box">
-            รายการข้อมูลเริ่มต้นก่อนเรียงลำดับ: 20, 16, 8, 7, 6, 10, 11, 12, 14, 22, 15, 17, 28, 29, 30, 4, 2, 21
+        <div class="data-box" id="randomDataBox">
+            รายการข้อมูลเริ่มต้นก่อนเรียงลำดับ: กำลังสร้างโจทย์สุ่ม...
         </div>
 
         <p><strong>คำชี้แจงส่วนที่ 1:</strong> เรียงลำดับข้อมูลจากน้อยไปหามาก และเติมคำตอบลงในช่องว่างของรายการข้อมูล L (18 ช่องคำตอบ)</p>
@@ -354,34 +352,34 @@
                     <th style="background:#475569;">ดัชนี (i)</th>
                     <td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td>
                 </tr>
-                <tr>
+                <tr id="sortAnswersRow">
                     <th style="background:#475569;">ข้อมูล (L)</th>
-                    <td><input type="number" class="quiz-input target-item" data-ans="2" id="l1" required></td>
-                    <td><input type="number" class="quiz-input target-item" data-ans="4" id="l2" required></td>
-                    <td><input type="number" class="quiz-input target-item" data-ans="6" id="l3" required></td>
-                    <td><input type="number" class="quiz-input target-item" data-ans="7" id="l4" required></td>
-                    <td><input type="number" class="quiz-input target-item" data-ans="8" id="l5" required></td>
-                    <td><input type="number" class="quiz-input target-item" data-ans="10" id="l6" required></td>
-                    <td><input type="number" class="quiz-input target-item" data-ans="11" id="l7" required></td>
-                    <td><input type="number" class="quiz-input target-item" data-ans="12" id="l8" required></td>
-                    <td><input type="number" class="quiz-input target-item" data-ans="14" id="l9" required></td>
-                    <td><input type="number" class="quiz-input target-item" data-ans="15" id="l10" required></td>
-                    <td><input type="number" class="quiz-input target-item" data-ans="16" id="l11" required></td>
-                    <td><input type="number" class="quiz-input target-item" data-ans="17" id="l12" required></td>
-                    <td><input type="number" class="quiz-input target-item" data-ans="20" id="l13" required></td>
-                    <td><input type="number" class="quiz-input target-item" data-ans="21" id="l14" required></td>
-                    <td><input type="number" class="quiz-input target-item" data-ans="22" id="l15" required></td>
-                    <td><input type="number" class="quiz-input target-item" data-ans="28" id="l16" required></td>
-                    <td><input type="number" class="quiz-input target-item" data-ans="29" id="l17" required></td>
-                    <td><input type="number" class="quiz-input target-item" data-ans="30" id="l18" required></td>
+                    <td><input type="number" class="quiz-input target-item" id="l1" required></td>
+                    <td><input type="number" class="quiz-input target-item" id="l2" required></td>
+                    <td><input type="number" class="quiz-input target-item" id="l3" required></td>
+                    <td><input type="number" class="quiz-input target-item" id="l4" required></td>
+                    <td><input type="number" class="quiz-input target-item" id="l5" required></td>
+                    <td><input type="number" class="quiz-input target-item" id="l6" required></td>
+                    <td><input type="number" class="quiz-input target-item" id="l7" required></td>
+                    <td><input type="number" class="quiz-input target-item" id="l8" required></td>
+                    <td><input type="number" class="quiz-input target-item" id="l9" required></td>
+                    <td><input type="number" class="quiz-input target-item" id="l10" required></td>
+                    <td><input type="number" class="quiz-input target-item" id="l11" required></td>
+                    <td><input type="number" class="quiz-input target-item" id="l12" required></td>
+                    <td><input type="number" class="quiz-input target-item" id="l13" required></td>
+                    <td><input type="number" class="quiz-input target-item" id="l14" required></td>
+                    <td><input type="number" class="quiz-input target-item" id="l15" required></td>
+                    <td><input type="number" class="quiz-input target-item" id="l16" required></td>
+                    <td><input type="number" class="quiz-input target-item" id="l17" required></td>
+                    <td><input type="number" class="quiz-input target-item" id="l18" required></td>
                 </tr>
             </table>
         </div>
 
-        <p><strong>คำชี้แจงส่วนที่ 2:</strong> แสดงขั้นตอนวิธีค้นหาข้อมูล target = 12 กำหนดให้ n = 18 โดยเติมคำตอบลงในช่องว่างของตารางให้สมบูรณ์</p>
+        <p id="part2Instruction"><strong>คำชี้แจงส่วนที่ 2:</strong> แสดงขั้นตอนวิธีค้นหาข้อมูล target = ... กำหนดให้ n = 18 โดยเติมคำตอบลงในช่องว่างของตารางให้สมบูรณ์</p>
         
         <div class="table-responsive">
-            <table>
+            <table id="binarySearchTable">
                 <thead>
                     <tr>
                         <th>รอบที่</th>
@@ -389,79 +387,11 @@
                         <th>right</th>
                         <th>mid</th>
                         <th>x (ข้อมูลที่ mid)</th>
-                        <th>ผลเปรียบเทียบกับ target (12)</th>
+                        <th>ผลเปรียบเทียบกับ target (<span class="target-val-span">...</span>)</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td><input type="number" class="quiz-input target-item" data-ans="1" id="s1_l" required></td>
-                        <td><input type="number" class="quiz-input target-item" data-ans="18" id="s1_r" required></td>
-                        <td><input type="number" class="quiz-input target-item" data-ans="9" id="s1_m" required></td>
-                        <td><input type="number" class="quiz-input target-item" data-ans="14" id="s1_x" required></td>
-                        <td>
-                            <select class="quiz-select target-item" data-ans="มากกว่า" id="s1_c" required>
-                                <option value="">เลือกคำตอบ</option>
-                                <option value="มากกว่า">มากกว่า</option>
-                                <option value="น้อยกว่า">น้อยกว่า</option>
-                                <option value="เท่ากับ">เท่ากับ</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td><input type="number" class="quiz-input target-item" data-ans="1" id="s2_l" required></td>
-                        <td><input type="number" class="quiz-input target-item" data-ans="8" id="s2_r" required></td>
-                        <td><input type="number" class="quiz-input target-item" data-ans="4" id="s2_m" required></td>
-                        <td><input type="number" class="quiz-input target-item" data-ans="7" id="s2_x" required></td>
-                        <td>
-                            <select class="quiz-select target-item" data-ans="น้อยกว่า" id="s2_c" required>
-                                <option value="">เลือกคำตอบ</option>
-                                <option value="มากกว่า">มากกว่า</option>
-                                <option value="น้อยกว่า">น้อยกว่า</option>
-                                <option value="เท่ากับ">เท่ากับ</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td><input type="number" class="quiz-input target-item" data-ans="5" id="s3_l" required></td>
-                        <td><input type="number" class="quiz-input target-item" data-ans="8" id="s3_r" required></td>
-                        <td><input type="number" class="quiz-input target-item" data-ans="6" id="s3_m" required></td>
-                        <td><input type="number" class="quiz-input target-item" data-ans="10" id="s3_x" required></td>
-                        <td>
-                            <select class="quiz-select target-item" data-ans="น้อยกว่า" id="s3_c" required>
-                                <option value="">เลือกคำตอบ</option>
-                                <option value="มากกว่า">มากกว่า</option>
-                                <option value="น้อยกว่า">น้อยกว่า</option>
-                                <option value="เท่ากับ">เท่ากับ</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td><input type="number" class="quiz-input target-item" data-ans="7" id="s4_l" required></td>
-                        <td><input type="number" class="quiz-input target-item" data-ans="8" id="s4_r" required></td>
-                        <td><input type="number" class="quiz-input target-item" data-ans="7" id="s4_m" required></td>
-                        <td><input type="number" class="quiz-input target-item" data-ans="11" id="s4_x" required></td>
-                        <td>
-                            <select class="quiz-select target-item" data-ans="น้อยกว่า" id="s4_c" required>
-                                <option value="">เลือกคำตอบ</option>
-                                <option value="มากกว่า">มากกว่า</option>
-                                <option value="น้อยกว่า">น้อยกว่า</option>
-                                <option value="เท่ากับ">เท่ากับ</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td><input type="number" class="quiz-input target-item" data-ans="8" id="s5_l" required></td>
-                        <td><input type="number" class="quiz-input target-item" data-ans="8" id="s5_r" required></td>
-                        <td><input type="number" class="quiz-input target-item" data-ans="8" id="s5_m" required></td>
-                        <td><input type="number" class="quiz-input target-item" data-ans="12" id="s5_x" required></td>
-                        <td class="text-fixed-finish">คืนค่าดัชนี i = 8</td>
-                    </tr>
-                </tbody>
+                <tbody id="searchStepsBody">
+                    </tbody>
             </table>
         </div>
 
@@ -492,21 +422,124 @@
 <script>
     const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyBgWScePuUUL2M0QCm6lH2BrVZ7oLp7LXyBrk2Y5L-HBrOcNFjAYjYFF2239QTBodD/exec";
 
+    let startTime = null;
+    let timerInterval = null;
+    let totalSecondsUsed = 0;
+    let cheatCount = 0; 
+
+    // --- ส่วนของระบบสุ่มโจทย์แบบอัตโนมัติ (Automated Quiz Generator) ---
+    let originalList = [];
+    let sortedList = [];
+    let targetValue = 0;
+
+    function generateRandomQuiz() {
+        // 1. สุ่มตัวเลขไม่ซ้ำกัน 18 ตัว ในช่วง 1-99
+        let numSet = new Set();
+        while(numSet.size < 18) {
+            numSet.add(Math.floor(Math.random() * 95) + 2); 
+        }
+        originalList = Array.from(numSet);
+        
+        // คัดลอกไปทำแบบเรียงลำดับ
+        sortedList = [...originalList].sort((a, b) => a - b);
+        
+        // แสดงผลชุดข้อมูลเริ่มต้นแบบสุ่มบนหน้าเว็บ
+        document.getElementById('randomDataBox').innerText = "รายการข้อมูลเริ่มต้นก่อนเรียงลำดับ: " + originalList.join(', ');
+
+        // 2. สุ่มเลือกตัวเลข target จากในกลุ่ม (เลือกตำแหน่งเฉพาะเพื่อให้ได้จำนวนรอบที่เหมาะสม เช่น 4-5 รอบ)
+        // เพื่อให้ท้าทายและคุ้มค่าตาราง มักจะสุ่มโดนตำแหน่งปลายๆ หรือจุดที่หาหลายรอบ
+        const possibleTargets = [sortedList[4], sortedList[6], sortedList[7], sortedList[11], sortedList[13]];
+        targetValue = possibleTargets[Math.floor(Math.random() * possibleTargets.length)];
+
+        document.getElementById('part2Instruction').innerHTML = `<strong>คำชี้แจงส่วนที่ 2:</strong> แสดงขั้นตอนวิธีค้นหาข้อมูล target = <span style="color:#2563eb; font-size:16px;">${targetValue}</span> กำหนดให้ n = 18 โดยเติมคำตอบลงในช่องว่างของตารางให้สมบูรณ์`;
+        document.querySelectorAll('.target-val-span').forEach(el => el.innerText = targetValue);
+
+        // 3. กำหนดค่าเฉลยคำตอบส่วนที่ 1 (ข้อมูลเรียงลำดับ)
+        for(let i = 1; i <= 18; i++) {
+            document.getElementById(`l${i}`).setAttribute('data-ans', sortedList[i-1]);
+        }
+
+        // 4. คำนวณ Trace Binary Search เพื่อสร้างตารางและเก็บเฉลยส่วนที่ 2
+        let left = 1;
+        let right = 18;
+        let step = 1;
+        let stepsHtml = "";
+
+        while(left <= right) {
+            let mid = Math.floor((left + right) / 2);
+            let x = sortedList[mid - 1];
+            let compareResult = "";
+            
+            if (x === targetValue) {
+                // รอบสุดท้ายที่เจอคำตอบพอดี
+                stepsHtml += `
+                <tr>
+                    <td>${step}</td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="${left}" id="s${step}_l" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="${right}" id="s${step}_r" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="${mid}" id="s${step}_m" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="${x}" id="s${step}_x" required></td>
+                    <td class="text-fixed-finish">คืนค่าดัชนี i = ${mid}</td>
+                </tr>`;
+                break;
+            } else if (x > targetValue) {
+                compareResult = "มากกว่า";
+                stepsHtml += `
+                <tr>
+                    <td>${step}</td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="${left}" id="s${step}_l" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="${right}" id="s${step}_r" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="${mid}" id="s${step}_m" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="${x}" id="s${step}_x" required></td>
+                    <td>
+                        <select class="quiz-select target-item" data-ans="${compareResult}" id="s${step}_c" required>
+                            <option value="">เลือกคำตอบ</option>
+                            <option value="มากกว่า">มากกว่า</option>
+                            <option value="น้อยกว่า">น้อยกว่า</option>
+                            <option value="เท่ากับ">เท่ากับ</option>
+                        </select>
+                    </td>
+                </tr>`;
+                right = mid - 1;
+            } else {
+                compareResult = "น้อยกว่า";
+                stepsHtml += `
+                <tr>
+                    <td>${step}</td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="${left}" id="s${step}_l" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="${right}" id="s${step}_r" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="${mid}" id="s${step}_m" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="${x}" id="s${step}_x" required></td>
+                    <td>
+                        <select class="quiz-select target-item" data-ans="${compareResult}" id="s${step}_c" required>
+                            <option value="">เลือกคำตอบ</option>
+                            <option value="มากกว่า">มากกว่า</option>
+                            <option value="น้อยกว่า">น้อยกว่า</option>
+                            <option value="เท่ากับ">เท่ากับ</option>
+                        </select>
+                    </td>
+                </tr>`;
+                left = mid + 1;
+            }
+            step++;
+        }
+        document.getElementById('searchStepsBody').innerHTML = stepsHtml;
+    }
+
+    // เรียกฟังก์ชันสุ่มโจทย์ทำงานตอนโหลดหน้าเว็บ
+    generateRandomQuiz();
+
+    // ผูก Event Listener ให้กับ inputs ทั้งหมดหลังถูกสร้างเสร็จ
     const allInputs = document.querySelectorAll('.target-item');
     const scoreBox = document.getElementById('scoreBox');
     const liveScoreDisplay = document.getElementById('liveScore');
     const submitBtn = document.querySelector('.btn-submit');
     const form = document.getElementById('sheetForm');
-    
-    let startTime = null;
-    let timerInterval = null;
-    let totalSecondsUsed = 0;
-    let cheatCount = 0; // เปลี่ยนจาก Boolean มาเป็น ตัวนับจำนวนครั้งการแอบสลับแถบ
 
-    // ตรวจสอบการเปิดแถบอื่นขณะทำข้อสอบ และนับจำนวนครั้งที่สลับหน้าจอออกไป
+    // ตรวจสอบการเปิดแถบอื่นขณะทำข้อสอบ
     document.addEventListener('visibilitychange', function() {
         if (document.hidden && startTime !== null) { 
-            cheatCount++; // บวกยอดจำนวนครั้งสะสม
+            cheatCount++; 
             showSystemModal("🚨 ตรวจพบการแอบเปลี่ยนแถบ!", `ระบบตรวจพบว่าคุณสลับโปรแกรมหรือแอบเปลี่ยนแท็บหน้าจอออกไป (ครั้งที่ ${cheatCount}) ยอดพฤติกรรมนี้จะถูกแจ้งและส่งบันทึกไปยังระบบของคุณครูทันที`);
         }
     });
@@ -533,7 +566,7 @@
         document.getElementById('timeDisplay').innerText = `${mins}:${secs}`;
     }
 
-    // ตรวจความถูกต้องของคำตอบย่อย
+    // ตรวจความถูกต้องของคำตอบย่อยแบบ Real-time
     allInputs.forEach(input => {
         input.addEventListener('change', function() {
             if (this.value.trim() !== "") {
@@ -562,15 +595,15 @@
     // คำนวณผลลัพธ์สุทธิ
     function processAndShowScore() {
         let correctCount = 0;
-        allInputs.forEach(input => {
+        const currentInputs = document.querySelectorAll('.target-item'); // ดึงข้อมูลชุดล่าสุดใน DOM
+        currentInputs.forEach(input => {
             if (input.value.trim() === input.getAttribute('data-ans')) { correctCount++; }
         });
         
-        let rawScore = (correctCount / allInputs.length) * 5;
+        let rawScore = (correctCount / currentInputs.length) * 5;
         let timeMinutes = totalSecondsUsed / 60;
         let timePenalty = 0;
 
-        // เกณฑ์หักคะแนนตามเวลาที่คุณครูกำหนด
         if (timeMinutes >= 25) { timePenalty = 5; }
         else if (timeMinutes >= 23) { timePenalty = 4; }
         else if (timeMinutes >= 21) { timePenalty = 3; }
@@ -580,11 +613,10 @@
         let finalScore = rawScore - timePenalty;
         if (finalScore < 0) finalScore = 0;
 
-        // ดันสถิติและคะแนนขึ้นหน้าจอสรุปท้ายใบงาน
         document.getElementById('txtRawScore').innerText = rawScore.toFixed(2);
         document.getElementById('txtTimeUsed').innerText = (totalSecondsUsed / 60).toFixed(2);
         document.getElementById('txtTimePenalty').innerText = timePenalty;
-        document.getElementById('txtCheatCount').innerText = cheatCount; // แสดงจำนวนครั้งที่นับได้
+        document.getElementById('txtCheatCount').innerText = cheatCount; 
         liveScoreDisplay.innerText = finalScore.toFixed(2);
         
         scoreBox.style.display = 'block';
@@ -600,7 +632,7 @@
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        clearInterval(timerInterval); // หยุดจับเวลา
+        clearInterval(timerInterval); 
 
         submitBtn.innerText = "กำลังทำการบันทึกข้อมูล...";
         submitBtn.disabled = true;
@@ -615,14 +647,13 @@
         formData.append('room', document.getElementById('room').value);
         formData.append('score', scoreDetails.finalScore);
         formData.append('timeUsed', scoreDetails.timeUsedStr);
-        formData.append('cheated', `แอบสลับหน้าจอ ${scoreDetails.cheatCount} ครั้ง`); // บันทึกข้อความเป็นตัวเลขจำนวนครั้งลง Sheet
+        formData.append('cheated', `แอบสลับหน้าจอ ${scoreDetails.cheatCount} ครั้ง (โจทย์เป้าหมาย: ${targetValue})`); 
 
         fetch(GOOGLE_WEB_APP_URL, {
             method: 'POST',
             body: formData
         })
         .then(response => {
-            // แจ้งเตือนป๊อปอัพคะแนนสุทธิหลังกดส่งสำเร็จ
             alert(`🎉 บันทึกผลคะแนนสำเร็จไปยังระบบคุณครูแล้ว!\n\n` + 
                   `----------------------------------------\n` +
                   `👤 ชื่อ-นามสกุล: ${document.getElementById('fullName').value}\n` +
