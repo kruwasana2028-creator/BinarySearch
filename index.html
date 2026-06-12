@@ -446,9 +446,9 @@
         // แสดงผลชุดข้อมูลเริ่มต้นแบบสุ่มบนหน้าเว็บ
         document.getElementById('randomDataBox').innerText = "รายการข้อมูลเริ่มต้นก่อนเรียงลำดับ: " + originalList.join(', ');
 
-        // 2. สุ่มเลือกตัวเลข target จากในกลุ่ม (เลือกตำแหน่งเฉพาะเพื่อให้ได้จำนวนรอบที่เหมาะสม เช่น 4-5 รอบ)
-        // เพื่อให้ท้าทายและคุ้มค่าตาราง มักจะสุ่มโดนตำแหน่งปลายๆ หรือจุดที่หาหลายรอบ
-        const possibleTargets = [sortedList[4], sortedList[6], sortedList[7], sortedList[11], sortedList[13]];
+        // 🔥 แก้ไขจุดนี้: เลือกตำแหน่งเฉพาะดัชนีที่ทำให้เกิดการรันครบ 5 รอบในตารางพอดี (ดัชนีที่ 8, 13, 18)
+        // ใน JavaScript Array Index จะเริ่มจาก 0 ดังนั้นจึงเป็น index ที่ 7, 12, 17
+        const possibleTargets = [sortedList[7], sortedList[12], sortedList[17]];
         targetValue = possibleTargets[Math.floor(Math.random() * possibleTargets.length)];
 
         document.getElementById('part2Instruction').innerHTML = `<strong>คำชี้แจงส่วนที่ 2:</strong> แสดงขั้นตอนวิธีค้นหาข้อมูล target = <span style="color:#2563eb; font-size:16px;">${targetValue}</span> กำหนดให้ n = 18 โดยเติมคำตอบลงในช่องว่างของตารางให้สมบูรณ์`;
