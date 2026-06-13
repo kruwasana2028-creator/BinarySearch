@@ -119,6 +119,26 @@
             margin: 0;
             padding-left: 20px;
         }
+        
+        /* สไตล์สำหรับกล่องแจ้งเตือนให้กรอกข้อมูล */
+        .waiting-box {
+            background: #f1f5f9;
+            border: 2px dashed #94a3b8;
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 20px;
+        }
+
+        /* ส่วนเนื้อหาโจทย์ที่จะถูกซ่อนในตอนแรก */
+        .quiz-content-area {
+            display: none; /* ซ่อนไว้เริ่มต้น */
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
         .data-box {
             background: #fffbeb;
             border-left: 5px solid #d97706;
@@ -200,7 +220,6 @@
             border-radius: 6px;
             border: 2px solid #bbf7d0;
             text-align: left;
-            animation: fadeIn 0.4s ease-in-out;
         }
         #liveScore {
             color: #15803d;
@@ -260,7 +279,7 @@
             font-family: 'Sarabun', sans-serif;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
@@ -277,7 +296,7 @@
     
     <div class="rule-box">
         <h5>⚠️ คำชี้แจงและกติกาการทำกิจกรรม (โปรดอ่านก่อนเริ่ม)</h5>
-        * <b>ห้ามเปิดแถบอื่นหรือสลับหน้าจอเด็ดขาด</b> หากระบบตรวจพบจะส่งแจ้งเตือนและนับยอดจำนวนครั้งบันทึกลงสู่ระบบคุณครู<br>
+        * <b>ห้ามเปิดแถบอื่นหรือสลับหน้าจอเด็ดขาด</b> หากระบบตรวจพบจะส่งแจ้งเตือนและบันทึกสถิติลงสู่ระบบคุณครู<br>
         * ระบบจะ<b>เริ่มจับเวลาโดยอัตโนมัติ</b> ทันทีที่คุณเริ่มพิมพ์คำตอบลงในกล่องแรกของตารางข้อมูล (ดัชนี 1)<br>
         * **เกณฑ์เวลาและการคำนวณคะแนน:**
         <table class="rule-table">
@@ -340,72 +359,78 @@
             </ol>
         </div>
 
-        <div class="data-box" id="randomDataBox">
-            รายการข้อมูลเริ่มต้นก่อนเรียงลำดับ: กำลังสร้างโจทย์สุ่ม...
+        <div id="waitingBox" class="waiting-box">
+            🔍 กรุณากรอก "เลขประจำตัว", "เลขที่" และ "ห้อง" ด้านบนให้ครบถ้วน เพื่อสร้างชุดโจทย์
         </div>
 
-        <p><strong>คำชี้แจงส่วนที่ 1:</strong> เรียงลำดับข้อมูลจากน้อยไปหามาก และเติมคำตอบลงในช่องว่างของรายการข้อมูล L (18 ช่องคำตอบ)</p>
-        
-        <div class="table-responsive">
-            <table>
-                <tr style="background:#f1f5f9;">
-                    <th style="background:#475569;">ดัชนี (i)</th>
-                    <td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td>
-                </tr>
-                <tr id="sortAnswersRow">
-                    <th style="background:#475569;">ข้อมูล (L)</th>
-                    <td><input type="number" class="quiz-input target-item" id="l1" required></td>
-                    <td><input type="number" class="quiz-input target-item" id="l2" required></td>
-                    <td><input type="number" class="quiz-input target-item" id="l3" required></td>
-                    <td><input type="number" class="quiz-input target-item" id="l4" required></td>
-                    <td><input type="number" class="quiz-input target-item" id="l5" required></td>
-                    <td><input type="number" class="quiz-input target-item" id="l6" required></td>
-                    <td><input type="number" class="quiz-input target-item" id="l7" required></td>
-                    <td><input type="number" class="quiz-input target-item" id="l8" required></td>
-                    <td><input type="number" class="quiz-input target-item" id="l9" required></td>
-                    <td><input type="number" class="quiz-input target-item" id="l10" required></td>
-                    <td><input type="number" class="quiz-input target-item" id="l11" required></td>
-                    <td><input type="number" class="quiz-input target-item" id="l12" required></td>
-                    <td><input type="number" class="quiz-input target-item" id="l13" required></td>
-                    <td><input type="number" class="quiz-input target-item" id="l14" required></td>
-                    <td><input type="number" class="quiz-input target-item" id="l15" required></td>
-                    <td><input type="number" class="quiz-input target-item" id="l16" required></td>
-                    <td><input type="number" class="quiz-input target-item" id="l17" required></td>
-                    <td><input type="number" class="quiz-input target-item" id="l18" required></td>
-                </tr>
-            </table>
-        </div>
-
-        <p id="part2Instruction"><strong>คำชี้แจงส่วนที่ 2:</strong> แสดงขั้นตอนวิธีค้นหาข้อมูล target = ... กำหนดให้ n = 18 โดยเติมคำตอบลงในช่องว่างของตารางให้สมบูรณ์</p>
-        
-        <div class="table-responsive">
-            <table id="binarySearchTable">
-                <thead>
-                    <tr>
-                        <th>รอบที่</th>
-                        <th>left</th>
-                        <th>right</th>
-                        <th>mid</th>
-                        <th>x (ข้อมูลที่ mid)</th>
-                        <th>ผลเปรียบเทียบกับ target (<span class="target-val-span">...</span>)</th>
-                    </tr>
-                </thead>
-                <tbody id="searchStepsBody">
-                    </tbody>
-            </table>
-        </div>
-
-        <div class="submit-area">
-            <div id="scoreBox" class="live-score-container">
-                🎉 บันทึกข้อมูลสำเร็จ!<br>
-                - คะแนนจากการทำใบงาน: <span id="txtRawScore">0</span>/5 คะแนน<br>
-                - เวลาที่ใช้ทั้งหมด: <span id="txtTimeUsed">0</span> นาที<br>
-                - คะแนนโดนหัก (ส่งช้า): <span id="txtTimePenalty">0</span> คะแนน<br>
-                - สถิติแอบสลับหน้าจอ: <span id="txtCheatCount" style="color: #dc2626; font-weight: bold;">0</span> ครั้ง<br>
-                📌 <b>คะแนนสุทธิรวมทั้งหมดของคุณคือ: <span id="liveScore">0.00</span> / 5 คะแนน</b>
+        <div id="quizContentArea" class="quiz-content-area">
+            <div class="data-box" id="randomDataBox">
+                รายการข้อมูลเริ่มต้นก่อนเรียงลำดับ: กำลังประมวลผลโจทย์เฉพาะบุคคล...
             </div>
-            <div class="action-row">
-                <button type="submit" class="btn-submit">ส่งบันทึกผลคะแนนไปยังระบบ</button>
+
+            <p><strong>คำชี้แจงส่วนที่ 1:</strong> เรียงลำดับข้อมูลจากน้อยไปหามาก และเติมคำตอบลงในช่องว่างของรายการข้อมูล L (18 ช่องคำตอบ)</p>
+            
+            <div class="table-responsive">
+                <table>
+                    <tr style="background:#f1f5f9;">
+                        <th style="background:#475569;">ดัชนี (i)</th>
+                        <td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td>
+                    </tr>
+                    <tr id="sortAnswersRow">
+                        <th style="background:#475569;">ข้อมูล (L)</th>
+                        <td><input type="number" class="quiz-input target-item" id="l1" required></td>
+                        <td><input type="number" class="quiz-input target-item" id="l2" required></td>
+                        <td><input type="number" class="quiz-input target-item" id="l3" required></td>
+                        <td><input type="number" class="quiz-input target-item" id="l4" required></td>
+                        <td><input type="number" class="quiz-input target-item" id="l5" required></td>
+                        <td><input type="number" class="quiz-input target-item" id="l6" required></td>
+                        <td><input type="number" class="quiz-input target-item" id="l7" required></td>
+                        <td><input type="number" class="quiz-input target-item" id="l8" required></td>
+                        <td><input type="number" class="quiz-input target-item" id="l9" required></td>
+                        <td><input type="number" class="quiz-input target-item" id="l10" required></td>
+                        <td><input type="number" class="quiz-input target-item" id="l11" required></td>
+                        <td><input type="number" class="quiz-input target-item" id="l12" required></td>
+                        <td><input type="number" class="quiz-input target-item" id="l13" required></td>
+                        <td><input type="number" class="quiz-input target-item" id="l14" required></td>
+                        <td><input type="number" class="quiz-input target-item" id="l15" required></td>
+                        <td><input type="number" class="quiz-input target-item" id="l16" required></td>
+                        <td><input type="number" class="quiz-input target-item" id="l17" required></td>
+                        <td><input type="number" class="quiz-input target-item" id="l18" required></td>
+                    </tr>
+                </table>
+            </div>
+
+            <p id="part2Instruction"><strong>คำชี้แจงส่วนที่ 2:</strong> แสดงขั้นตอนวิธีค้นหาข้อมูล target = ... กำหนดให้ n = 18 โดยเติมคำตอบลงในช่องว่างของตารางให้สมบูรณ์</p>
+            
+            <div class="table-responsive">
+                <table id="binarySearchTable">
+                    <thead>
+                        <tr>
+                            <th>รอบที่</th>
+                            <th>left</th>
+                            <th>right</th>
+                            <th>mid</th>
+                            <th>x (ข้อมูลที่ mid)</th>
+                            <th>ผลเปรียบเทียบกับ target (<span class="target-val-span">...</span>)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="searchStepsBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="submit-area">
+                <div id="scoreBox" class="live-score-container">
+                    🎉 บันทึกข้อมูลสำเร็จ!<br>
+                    - คะแนนจากการทำใบงาน: <span id="txtRawScore">0</span>/5 คะแนน<br>
+                    - เวลาที่ใช้ทั้งหมด: <span id="txtTimeUsed">0</span> นาที<br>
+                    - คะแนนโดนหัก (ส่งช้า): <span id="txtTimePenalty">0</span> คะแนน<br>
+                    - สถิติแอบสลับหน้าจอ: <span id="txtCheatCount" style="color: #dc2626; font-weight: bold;">0</span> ครั้ง<br>
+                    📌 <b>คะแนนสุทธิรวมทั้งหมดของคุณคือ: <span id="liveScore">0.00</span> / 5 คะแนน</b>
+                </div>
+                <div class="action-row">
+                    <button type="submit" class="btn-submit">ส่งบันทึกผลคะแนนไปยังระบบ</button>
+                </div>
             </div>
         </div>
     </form>
@@ -427,39 +452,71 @@
     let totalSecondsUsed = 0;
     let cheatCount = 0; 
 
-    // --- ส่วนของระบบสุ่มโจทย์แบบอัตโนมัติ (Automated Quiz Generator) ---
+    function seededRandom(seed) {
+        let x = Math.sin(seed++) * 10000;
+        return x - Math.floor(x);
+    }
+
+    function getSeededQuizData(seed) {
+        let numSet = new Set();
+        let currentSeed = seed;
+        
+        while(numSet.size < 18) {
+            let rand = seededRandom(currentSeed);
+            let num = Math.floor(rand * 95) + 2; 
+            numSet.add(num);
+            currentSeed++;
+        }
+        
+        let original = Array.from(numSet);
+        let sorted = [...original].sort((a, b) => a - b);
+        
+        const targetIndices = [7, 12, 17];
+        let targetIndexRand = Math.floor(seededRandom(currentSeed * 2) * targetIndices.length);
+        let target = sorted[targetIndices[targetIndexRand]];
+        
+        return { original, sorted, target };
+    }
+
     let originalList = [];
     let sortedList = [];
     let targetValue = 0;
 
     function generateRandomQuiz() {
-        // 1. สุ่มตัวเลขไม่ซ้ำกัน 18 ตัว ในช่วง 1-99
-        let numSet = new Set();
-        while(numSet.size < 18) {
-            numSet.add(Math.floor(Math.random() * 95) + 2); 
+        const studentNo = document.getElementById('no').value.trim();
+        const studentRoom = document.getElementById('room').value.trim();
+        const studentId = document.getElementById('studentId').value.trim();
+        
+        // 🛠️ เงื่อนไขเช็ค: ถ้ายังกรอกข้อมูลหลัก 3 ตัวนี้ไม่ครบ ให้ซ่อนโจทย์ไว้ต่อไป
+        if (!studentNo || !studentRoom || !studentId) {
+            document.getElementById('waitingBox').style.display = 'block';
+            document.getElementById('quizContentArea').style.display = 'none';
+            return; 
         }
-        originalList = Array.from(numSet);
-        
-        // คัดลอกไปทำแบบเรียงลำดับ
-        sortedList = [...originalList].sort((a, b) => a - b);
-        
-        // แสดงผลชุดข้อมูลเริ่มต้นแบบสุ่มบนหน้าเว็บ
-        document.getElementById('randomDataBox').innerText = "รายการข้อมูลเริ่มต้นก่อนเรียงลำดับ: " + originalList.join(', ');
 
-        // 🔥 แก้ไขจุดนี้: เลือกตำแหน่งเฉพาะดัชนีที่ทำให้เกิดการรันครบ 5 รอบในตารางพอดี (ดัชนีที่ 8, 13, 18)
-        // ใน JavaScript Array Index จะเริ่มจาก 0 ดังนั้นจึงเป็น index ที่ 7, 12, 17
-        const possibleTargets = [sortedList[7], sortedList[12], sortedList[17]];
-        targetValue = possibleTargets[Math.floor(Math.random() * possibleTargets.length)];
+        // เมื่อกรอกครบแล้ว -> ซ่อนกล่องแจ้งเตือนสีเทา และแสดงเนื้อหาโจทย์ขึ้นมา
+        document.getElementById('waitingBox').style.display = 'none';
+        document.getElementById('quizContentArea').style.display = 'block';
+
+        let seedString = studentRoom + studentNo + studentId;
+        let seed = parseInt(seedString.replace(/\D/g, '')) || 12345; 
+
+        const quizData = getSeededQuizData(seed);
+        originalList = quizData.original;
+        sortedList = quizData.sorted;
+        targetValue = quizData.target;
+        
+        document.getElementById('randomDataBox').innerText = "รายการข้อมูลเริ่มต้นก่อนเรียงลำดับ (เฉพาะบุคคล): " + originalList.join(', ');
 
         document.getElementById('part2Instruction').innerHTML = `<strong>คำชี้แจงส่วนที่ 2:</strong> แสดงขั้นตอนวิธีค้นหาข้อมูล target = <span style="color:#2563eb; font-size:16px;">${targetValue}</span> กำหนดให้ n = 18 โดยเติมคำตอบลงในช่องว่างของตารางให้สมบูรณ์`;
         document.querySelectorAll('.target-val-span').forEach(el => el.innerText = targetValue);
 
-        // 3. กำหนดค่าเฉลยคำตอบส่วนที่ 1 (ข้อมูลเรียงลำดับ)
         for(let i = 1; i <= 18; i++) {
-            document.getElementById(`l${i}`).setAttribute('data-ans', sortedList[i-1]);
+            let inputEl = document.getElementById(`l${i}`);
+            inputEl.setAttribute('data-ans', sortedList[i-1]);
+            inputEl.classList.remove('input-correct', 'input-incorrect');
         }
 
-        // 4. คำนวณ Trace Binary Search เพื่อสร้างตารางและเก็บเฉลยส่วนที่ 2
         let left = 1;
         let right = 18;
         let step = 1;
@@ -471,7 +528,6 @@
             let compareResult = "";
             
             if (x === targetValue) {
-                // รอบสุดท้ายที่เจอคำตอบพอดี
                 stepsHtml += `
                 <tr>
                     <td>${step}</td>
@@ -507,7 +563,7 @@
                 <tr>
                     <td>${step}</td>
                     <td><input type="number" class="quiz-input target-item" data-ans="${left}" id="s${step}_l" required></td>
-                    <td><input type="number" class="quiz-input target-item" data-ans="${right}" id="s${step}_r" required></td>
+                    <td><input type="number" class="quiz-input target-item" data-ans="${right}" id="sTemplate}_r" id="s${step}_r" required></td>
                     <td><input type="number" class="quiz-input target-item" data-ans="${mid}" id="s${step}_m" required></td>
                     <td><input type="number" class="quiz-input target-item" data-ans="${x}" id="s${step}_x" required></td>
                     <td>
@@ -524,19 +580,45 @@
             step++;
         }
         document.getElementById('searchStepsBody').innerHTML = stepsHtml;
+        rebindValidationEvents();
     }
 
-    // เรียกฟังก์ชันสุ่มโจทย์ทำงานตอนโหลดหน้าเว็บ
-    generateRandomQuiz();
+    function rebindValidationEvents() {
+        const currentInputs = document.querySelectorAll('.target-item');
+        currentInputs.forEach(input => {
+            input.removeEventListener('change', validateInputHandler);
+            input.addEventListener('change', validateInputHandler);
+        });
+    }
 
-    // ผูก Event Listener ให้กับ inputs ทั้งหมดหลังถูกสร้างเสร็จ
-    const allInputs = document.querySelectorAll('.target-item');
+    function validateInputHandler() {
+        if (this.value.trim() !== "") {
+            if (this.value.trim() !== this.getAttribute('data-ans')) {
+                this.classList.remove('input-correct');
+                this.classList.add('input-incorrect');
+                showSystemModal("⚠️ คำแจ้งเตือนระบบ", "ตัวเลขหรือผลการเปรียบเทียบที่คุณระบุไม่ถูกต้องตามขั้นตอนวิธี กรุณาทบทวนหลักการค้นหาแบบทวิภาคใหม่อีกครั้ง!");
+            } else {
+                this.classList.remove('input-incorrect');
+                this.classList.add('input-correct');
+            }
+        } else {
+            this.classList.remove('input-correct', 'input-incorrect');
+        }
+    }
+
+    // 🛠️ ลบคำสั่งเรียกตอนเริ่มต้นออกไป เพื่อรอรับการกรอกข้อมูลของนักเรียนก่อน
+    // (เดิมเคยมีคำสั่ง generateRandomQuiz(); อยู่ตรงนี้)
+
+    // ผูกคำสั่งตรวจจับการพิมพ์ข้อมูล เมื่อมีการพิมพ์หรือเลือกข้อมูลระบบจะสั่งประมวลผลโจทย์ทันที
+    document.getElementById('no').addEventListener('input', generateRandomQuiz);
+    document.getElementById('room').addEventListener('input', generateRandomQuiz);
+    document.getElementById('studentId').addEventListener('input', generateRandomQuiz);
+
     const scoreBox = document.getElementById('scoreBox');
     const liveScoreDisplay = document.getElementById('liveScore');
     const submitBtn = document.querySelector('.btn-submit');
     const form = document.getElementById('sheetForm');
 
-    // ตรวจสอบการเปิดแถบอื่นขณะทำข้อสอบ
     document.addEventListener('visibilitychange', function() {
         if (document.hidden && startTime !== null) { 
             cheatCount++; 
@@ -544,14 +626,12 @@
         }
     });
 
-    // เริ่มจับเวลาเมื่อกรอกข้อมูลลงช่องแรก (l1)
-    const firstInput = document.getElementById('l1');
-    firstInput.addEventListener('input', function startTimerOnce() {
+    document.getElementById('l1').addEventListener('input', function startTimerOnce() {
         if (startTime === null) {
             startTime = new Date();
             document.getElementById('timerBadge').style.display = 'flex';
             timerInterval = setInterval(updateTimerDisplay, 1000);
-            firstInput.removeEventListener('input', startTimerOnce); 
+            this.removeEventListener('input', startTimerOnce); 
         }
     });
 
@@ -566,24 +646,6 @@
         document.getElementById('timeDisplay').innerText = `${mins}:${secs}`;
     }
 
-    // ตรวจความถูกต้องของคำตอบย่อยแบบ Real-time
-    allInputs.forEach(input => {
-        input.addEventListener('change', function() {
-            if (this.value.trim() !== "") {
-                if (this.value.trim() !== this.getAttribute('data-ans')) {
-                    this.classList.remove('input-correct');
-                    this.classList.add('input-incorrect');
-                    showSystemModal("⚠️ คำแจ้งเตือนระบบ", "ตัวเลขหรือผลการเปรียบเทียบที่คุณระบุไม่ถูกต้องตามขั้นตอนวิธี กรุณาทบทวนหลักการค้นหาแบบทวิภาคใหม่อีกครั้ง!");
-                } else {
-                    this.classList.remove('input-incorrect');
-                    this.classList.add('input-correct');
-                }
-            } else {
-                this.classList.remove('input-correct', 'input-incorrect');
-            }
-        });
-    });
-
     function showSystemModal(title, desc) {
         document.getElementById('modalTitle').innerText = title;
         document.getElementById('modalDesc').innerText = desc;
@@ -592,10 +654,9 @@
 
     function closeModal() { document.getElementById('alertModal').style.display = 'none'; }
 
-    // คำนวณผลลัพธ์สุทธิ
     function processAndShowScore() {
         let correctCount = 0;
-        const currentInputs = document.querySelectorAll('.target-item'); // ดึงข้อมูลชุดล่าสุดใน DOM
+        const currentInputs = document.querySelectorAll('.target-item');
         currentInputs.forEach(input => {
             if (input.value.trim() === input.getAttribute('data-ans')) { correctCount++; }
         });
